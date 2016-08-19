@@ -14,11 +14,11 @@
 namespace libnbt {
 
     enum class TagType {
-        TagEnd,
-        TagByte, TagShort, TagInt, TagLong, TagFloat, TagDouble,
-        TagByteArray, TagString,
-        TagList, TagCompound,
-        TagIntArray
+        TypeEnd,
+        TypeByte, TypeShort, TypeInt, TypeLong, TypeFloat, TypeDouble,
+        TypeByteArray, TypeString,
+        TypeList, TypeCompound,
+        TypeIntArray
     };
 
     class Tag {
@@ -45,15 +45,21 @@ namespace libnbt {
     private:
         int8_t value;
     public:
+        TagByte(std::string key);
+
         int8_t getValue();
 
         void setValue(int8_t val);
+
+
     };
 
     class TagShort : public Tag {
     private:
         int16_t value;
     public:
+        TagShort(std::string key);
+
         int16_t getValue();
 
         void setValue(int16_t val);
@@ -63,6 +69,8 @@ namespace libnbt {
     private:
         int32_t value;
     public:
+        TagInt(std::string key);
+
         int32_t getValue();
 
         void setValue(int32_t val);
@@ -72,6 +80,8 @@ namespace libnbt {
     private:
         int64_t value;
     public:
+        TagLong(std::string key);
+
         int64_t getValue();
 
         void setValue(int64_t val);
@@ -81,6 +91,8 @@ namespace libnbt {
     private:
         float value;
     public:
+        TagFloat(std::string key);
+
         float getValue();
 
         void setValue(float val);
@@ -90,6 +102,8 @@ namespace libnbt {
     private:
         double value;
     public:
+        TagDouble(std::string key);
+
         double getValue();
 
         void setValue(double val);
@@ -98,8 +112,13 @@ namespace libnbt {
     class TagByteArray : public Tag {
     private:
         int8_t *value;
+        int size;
     public:
+        TagByteArray(std::string key, int size);
+
         int8_t *getValue();
+
+        int getSize();
 
         void setValue(int8_t *val);
     };
@@ -108,6 +127,8 @@ namespace libnbt {
     private:
         std::string value;
     public:
+        TagString(std::string key);
+
         std::string getValue();
 
         void setValue(std::string val);
@@ -116,11 +137,11 @@ namespace libnbt {
     class TagList : public Tag {
     private:
         TagType listType;
-        std::vector<Tag *> *list;
+        std::vector<Tag *> list;
     public:
-        std::vector<Tag *> *getValue();
+        TagList(std::string key, TagType listType);
 
-        void setValue(std::vector<Tag *> *val);
+        TagType getListType();
 
         void appendValue(Tag *val);
 
@@ -129,11 +150,9 @@ namespace libnbt {
 
     class TagCompound : public Tag {
     private:
-        std::vector<Tag *> *compound;
+        std::vector<Tag *> compound;
     public:
-        std::vector<Tag *> *getValue();
-
-        void setValue(std::vector<Tag *> *val);
+        TagCompound(std::string key);
 
         void appendValue(Tag *val);
 
@@ -143,7 +162,12 @@ namespace libnbt {
     class TagIntArray : public Tag {
     private:
         int32_t *value;
+        int size;
     public:
+        TagIntArray(std::string key, int size);
+
+        int getSize();
+
         int32_t *getValue();
 
         void setValue(int32_t *val);

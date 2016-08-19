@@ -3,12 +3,16 @@
  * Copyright (c) 2015-2016. Himmelt All rights reserved.
  * https://opensource.org/licenses/MIT
  ******************************************************************************/
+
 #include <iostream>
-#include "include/tag.h"
+#include "include/nbt.h"
 
 using namespace std;
 using namespace libnbt;
 
-void main() {
-    cout << (int) TagType::TagEnd << endl;
+int main() {
+
+    cout << (int) TagType::TypeEnd << endl;
+    getchar();
+    return 0;
 }

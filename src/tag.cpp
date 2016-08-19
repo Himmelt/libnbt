@@ -33,6 +33,10 @@ namespace libnbt {
         return type;
     }
 
+    TagByte::TagByte(std::string key) : Tag(key) {
+        setType(TagType::TypeByte);
+    }
+
     int8_t TagByte::getValue() {
         return value;
     }
@@ -49,12 +53,20 @@ namespace libnbt {
         value = val;
     }
 
+    TagShort::TagShort(std::string key) : Tag(key) {
+        setType(TagType::TypeShort);
+    }
+
     int32_t TagInt::getValue() {
         return value;
     }
 
     void TagInt::setValue(int32_t val) {
         value = val;
+    }
+
+    TagInt::TagInt(std::string key) : Tag(key) {
+        setType(TagType::TypeInt);
     }
 
     int64_t TagLong::getValue() {
@@ -65,12 +77,20 @@ namespace libnbt {
         value = val;
     }
 
+    TagLong::TagLong(std::string key) : Tag(key) {
+        setType(TagType::TypeLong);
+    }
+
     float TagFloat::getValue() {
         return value;
     }
 
     void TagFloat::setValue(float val) {
         value = val;
+    }
+
+    TagFloat::TagFloat(std::string key) : Tag(key) {
+        setType(TagType::TypeFloat);
     }
 
     double TagDouble::getValue() {
@@ -81,12 +101,25 @@ namespace libnbt {
         value = val;
     }
 
+    TagDouble::TagDouble(std::string key) : Tag(key) {
+        setType(TagType::TypeDouble);
+    }
+
     int8_t *TagByteArray::getValue() {
         return value;
     }
 
     void TagByteArray::setValue(int8_t *val) {
         value = val;
+    }
+
+    TagByteArray::TagByteArray(std::string key, int size) : Tag(key) {
+        setType(TagType::TypeByteArray);
+        TagByteArray::size = size;
+    }
+
+    int TagByteArray::getSize() {
+        return size;
     }
 
     std::string TagString::getValue() {
@@ -97,50 +130,51 @@ namespace libnbt {
         value = val;
     }
 
-    std::vector<Tag *> *TagList::getValue() {
-        return list;
-    }
-
-    void TagList::setValue(std::vector<Tag *> *val) {
-        list = val;
+    TagString::TagString(std::string key) : Tag(key) {
+        setType(TagType::TypeString);
     }
 
     void TagList::appendValue(Tag *val) {
-        list->push_back(val);
+        list.push_back(val);
     }
 
     void TagList::deleteValue(int index) {
-        Tag *tag = (*list)[index];
+        Tag *tag = list[index];
         try {
             delete tag;
         }
         catch (int) {
             std::cout << "Dynamic Data Erase Error!!" << std::endl;
         }
-        list->erase(list->begin() + index);
+        list.erase(list.begin() + index);
     }
 
-    std::vector<Tag *> *TagCompound::getValue() {
-        return compound;
+    TagList::TagList(std::string key, TagType listType) : Tag(key) {
+        setType(TagType::TypeList);
+        TagList::listType = listType;
     }
 
-    void TagCompound::setValue(std::vector<Tag *> *val) {
-        compound = val;
+    TagType TagList::getListType() {
+        return listType;
     }
 
     void TagCompound::appendValue(Tag *val) {
-        compound->push_back(val);
+        compound.push_back(val);
     }
 
     void TagCompound::deleteValue(int index) {
-        Tag *tag = (*compound)[index];
+        Tag *tag = compound[index];
         try {
             delete tag;
         }
         catch (int) {
             std::cout << "Dynamic Data Erase Error!!" << std::endl;
         }
-        compound->erase(compound->begin() + index);
+        compound.erase(compound.begin() + index);
+    }
+
+    TagCompound::TagCompound(std::string key) : Tag(key) {
+        setType(TagType::TypeCompound);
     }
 
     int32_t *TagIntArray::getValue() {
@@ -151,4 +185,12 @@ namespace libnbt {
         value = val;
     }
 
+    TagIntArray::TagIntArray(std::string key, int size) : Tag(key) {
+        setType(TagType::TypeIntArray);
+        TagIntArray::size = size;
+    }
+
+    int TagIntArray::getSize() {
+        return size;
+    }
 }

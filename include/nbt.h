@@ -46,8 +46,12 @@ namespace libnbt {
 
         std::string readString(int n);
 
-        TagCompound *prase(std::string key, bool isList, TagType listType);
+        TagCompound *prase(std::string key);
+
+        TagList *prase(std::string key, int size, TagType listType);
     };
+
+#pragma clang diagnostic pop
 }
 
 #endif //LIBNBT_NBT_H
