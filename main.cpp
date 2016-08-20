@@ -12,7 +12,7 @@ using namespace libnbt;
 
 int main() {
 
-    cout << (int) TagType::TypeEnd << endl;
-    getchar();
+    NBT nbt("level.dat");
+
     return 0;
 }

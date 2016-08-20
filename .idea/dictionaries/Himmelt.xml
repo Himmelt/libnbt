@@ -2,6 +2,7 @@
   <dictionary name="Himmelt">
     <words>
       <w>filebuf</w>
+      <w>gzfile</w>
       <w>himmelt</w>
       <w>libnbt</w>
       <w>minecraft</w>

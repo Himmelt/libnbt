@@ -18,18 +18,53 @@ namespace libnbt {
     }
 
     void NBT::open(std::string filename) {
-        infile.open(filename, std::ios::binary);
-        std::filebuf *filebuf = infile.rdbuf();
-        long size = (long) filebuf->pubseekoff(0, std::ios::end, std::ios::in);
-        if (size <= 0) {
-            std::cout << "Read File Error!!" << std::endl;
+
+        std::filebuf filebuf;
+        filebuf.open(filename, std::ios::in | std::ios::binary);
+
+        if (filebuf.is_open()) {
+            std::cout << "open" << std::endl;
+            char head[4];
+            filebuf.sgetn(head, 2);
+            // gzip header ?
+            printf("head:%x,%x", head[0], head[1] & 0xff);
+            if ((head[0] & 0xff) == 0x1f && (head[1] & 0xff) == 0x8b) {
+                std::cout << "gzip" << std::endl;
+                filebuf.pubseekoff(-4, std::ios::end);
+                filebuf.pubsetbuf(head, 4);
+                size = (head[3] & 0xff | size) << 8;
+                size = (head[2] & 0xff | size) << 8;
+                size = (head[1] & 0xff | size) << 8;
+                size = head[0] & 0xff | size;
+                gzFile gzfile = gzopen(filename.c_str(), "rb");
+                if (gztell(gzfile) >= 0) {
+                    buff = new int8_t[size];
+                    int code = gzread(gzfile, buff, size);
+                    if (code <= 0) {
+                        std::cout << "code:" << code << std::endl;
+                        std::cout << "uncompress gzip failed!" << std::endl;
+                    } else {
+                        std::cout << "uncompress gzip success!" << std::endl;
+                    }
+                } else {
+                    std::cout << "read gzip failed!" << std::endl;
+                }
+                gzclose(gzfile);
+            } else {
+                size = (unsigned int) filebuf.pubseekoff(0, std::ios::end, std::ios::in);
+                if (size <= 0) {
+                    std::cout << "read file failed!" << std::endl;
+                } else {
+                    buff = new int8_t[size];
+                    filebuf.pubseekpos(0, std::ios::in);
+                    filebuf.sgetn((char *) buff, size);
+                    std::cout << "read file success!" << std::endl;
+                }
+            }
         } else {
-            NBT::size = size;
-            buff = new int8_t[size];
-            filebuf->pubseekpos(0, std::ios::in);
-            filebuf->sgetn((char *) buff, size);
+            std::cout << "read file error!" << std::endl;
         }
-        infile.close();
+        filebuf.close();
     }
 
     int8_t NBT::readByte() {
@@ -301,5 +336,10 @@ namespace libnbt {
             }
         }
         return tagList;
+    }
+
+    NBT::NBT(int8_t *buff, unsigned int size) {
+        NBT::buff = NBT::seek = buff;
+        NBT::size = size;
     }
 }

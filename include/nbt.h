@@ -10,19 +10,21 @@
 
 #include <iostream>
 #include <fstream>
+#include <zlib.h>
 #include "tag.h"
 
 namespace libnbt {
     class NBT {
     private:
-        std::ifstream infile;
         int8_t *buff = nullptr;
         int8_t *seek = nullptr;
-        long size = 0;
+        unsigned int size = 0;
     public:
         NBT();
 
         NBT(std::string filename);
+
+        NBT(int8_t *buff, unsigned int size);
 
         ~NBT();
 
