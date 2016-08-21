@@ -27,15 +27,19 @@ namespace libnbt {
             char head[4];
             filebuf.sgetn(head, 2);
             // gzip header ?
-            printf("head:%x,%x", head[0], head[1] & 0xff);
+            printf("head:%x,%x\n", head[0], head[1] & 0xff);
             if ((head[0] & 0xff) == 0x1f && (head[1] & 0xff) == 0x8b) {
                 std::cout << "gzip" << std::endl;
                 filebuf.pubseekoff(-4, std::ios::end);
-                filebuf.pubsetbuf(head, 4);
+                filebuf.sgetn(head, 4);
                 size = (head[3] & 0xff | size) << 8;
                 size = (head[2] & 0xff | size) << 8;
                 size = (head[1] & 0xff | size) << 8;
                 size = head[0] & 0xff | size;
+
+                std::cout << "i size:" << std::hex << (head[3] & 0xff) << (head[2] & 0xff) << (head[1] & 0xff)
+                          << (head[0] & 0xff) << std::endl;
+
                 gzFile gzfile = gzopen(filename.c_str(), "rb");
                 if (gztell(gzfile) >= 0) {
                     buff = new int8_t[size];
@@ -44,6 +48,7 @@ namespace libnbt {
                         std::cout << "code:" << code << std::endl;
                         std::cout << "uncompress gzip failed!" << std::endl;
                     } else {
+                        std::cout << "return size:" << code << std::endl;
                         std::cout << "uncompress gzip success!" << std::endl;
                     }
                 } else {
@@ -68,7 +73,7 @@ namespace libnbt {
     }
 
     int8_t NBT::readByte() {
-        if (size > 0 && seek - buff <= size) {
+        if (size > 0 && (unsigned int) (seek - buff) <= size) {
             return seek++[0];
         } else {
             return 0;
@@ -120,6 +125,7 @@ namespace libnbt {
     }
 
     std::string NBT::readString(int n) {
+        if (n == 0) return "";
         int8_t *buff = nullptr;
         buff = new int8_t[n + 1];
         for (int i = 0; i < n; i++) {
@@ -135,7 +141,7 @@ namespace libnbt {
 
         TagCompound *compound = new TagCompound(key);
 
-        while (seek - buff <= size) {
+        while ((unsigned int) (seek - buff) <= size) {
             TagType type = (TagType) readByte();
             switch (type) {
                 case TagType::TypeEnd: {

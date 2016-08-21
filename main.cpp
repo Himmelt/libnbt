@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
  * Created by Himmelt on 2016/8/18.
  * Copyright (c) 2015-2016. Himmelt All rights reserved.
  * https://opensource.org/licenses/MIT
@@ -12,7 +12,9 @@ using namespace libnbt;
 
 int main() {
 
-    NBT nbt("level.dat");
+    TagByte tag("byte");
+    tag.setValue('S');
+    cout << &tag << endl;
 
     return 0;
 }

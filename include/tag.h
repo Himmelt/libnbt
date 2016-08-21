@@ -9,6 +9,7 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 #include <vector>
 
 namespace libnbt {
@@ -22,9 +23,10 @@ namespace libnbt {
     };
 
     class Tag {
+
     private:
         TagType type;
-        std::string key;
+        std::string key = "";
     public:
         Tag();
 
@@ -39,9 +41,11 @@ namespace libnbt {
         void setType(TagType type);
 
         TagType getType();
+
     };
 
     class TagByte : public Tag {
+
     private:
         int8_t value;
     public:
@@ -50,8 +54,6 @@ namespace libnbt {
         int8_t getValue();
 
         void setValue(int8_t val);
-
-
     };
 
     class TagShort : public Tag {
@@ -125,7 +127,7 @@ namespace libnbt {
 
     class TagString : public Tag {
     private:
-        std::string value;
+        std::string value = "";
     public:
         TagString(std::string key);
 
@@ -143,6 +145,8 @@ namespace libnbt {
 
         TagType getListType();
 
+        std::vector<Tag *> getValue();
+
         void appendValue(Tag *val);
 
         void deleteValue(int index);
@@ -153,6 +157,8 @@ namespace libnbt {
         std::vector<Tag *> compound;
     public:
         TagCompound(std::string key);
+
+        std::vector<Tag *> getValue();
 
         void appendValue(Tag *val);
 
@@ -172,6 +178,9 @@ namespace libnbt {
 
         void setValue(int32_t *val);
     };
+
+    std::ostream &operator<<(std::ostream &out, Tag *_tag);
+
 }
 
 #endif //LIBNBT_TAG_H

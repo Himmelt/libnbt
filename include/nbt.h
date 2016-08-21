@@ -14,6 +14,7 @@
 #include "tag.h"
 
 namespace libnbt {
+
     class NBT {
     private:
         int8_t *buff = nullptr;
@@ -53,7 +54,6 @@ namespace libnbt {
         TagList *prase(std::string key, int size, TagType listType);
     };
 
-#pragma clang diagnostic pop
 }
 
 #endif //LIBNBT_NBT_H

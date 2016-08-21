@@ -1,3 +1,11 @@
+/build
+/packages
+/.vs
+
+libnbt.VC.db
+libnbt.vcxproj.user
+libnbt.vcxproj.filters
+
 # Compiled Object files
 *.slo
 *.lo
