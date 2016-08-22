@@ -4,9 +4,12 @@
       <w>filebuf</w>
       <w>gzfile</w>
       <w>himmelt</w>
+      <w>inlist</w>
+      <w>islist</w>
       <w>libnbt</w>
       <w>listbyte</w>
       <w>minecraft</w>
+      <w>notroot</w>
       <w>prase</w>
       <w>struct</w>
     </words>

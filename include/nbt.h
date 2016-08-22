@@ -29,6 +29,8 @@ namespace libnbt {
 
         ~NBT();
 
+        void print();
+
         void open(std::string filename);
 
         int8_t readByte();
@@ -49,9 +51,11 @@ namespace libnbt {
 
         std::string readString(int n);
 
-        TagCompound *prase(std::string key);
+        TagCompound *prase();
 
-        TagList *prase(std::string key, int size, TagType listType);
+        TagCompound *prase(std::string key, bool _inlist);
+
+        TagList *prase(std::string key, int size, TagType listType, bool _inlist);
     };
 
 }

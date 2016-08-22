@@ -12,9 +12,11 @@ using namespace libnbt;
 
 int main() {
 
-    TagByte tag("byte");
-    tag.setValue('S');
-    cout << &tag << endl;
-
+    NBT nbt("level.dat");
+    nbt.print();
+    cout << "=======================================" << endl;
+    TagCompound *compound = nbt.prase();
+    cout << compound << endl;
     return 0;
+
 }

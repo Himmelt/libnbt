@@ -27,10 +27,17 @@ namespace libnbt {
     private:
         TagType type;
         std::string key = "";
+        bool inlist = false;
     public:
         Tag();
 
         Tag(std::string key);
+
+        Tag(bool _inlist);
+
+        bool isInlist();
+
+        void setInlist(bool _inlist);
 
         ~Tag();
 
@@ -51,6 +58,8 @@ namespace libnbt {
     public:
         TagByte(std::string key);
 
+        TagByte(bool _inlist);
+
         int8_t getValue();
 
         void setValue(int8_t val);
@@ -61,6 +70,8 @@ namespace libnbt {
         int16_t value;
     public:
         TagShort(std::string key);
+
+        TagShort(bool _inlist);
 
         int16_t getValue();
 
@@ -73,6 +84,8 @@ namespace libnbt {
     public:
         TagInt(std::string key);
 
+        TagInt(bool _inlist);
+
         int32_t getValue();
 
         void setValue(int32_t val);
@@ -83,6 +96,8 @@ namespace libnbt {
         int64_t value;
     public:
         TagLong(std::string key);
+
+        TagLong(bool _inlist);
 
         int64_t getValue();
 
@@ -95,6 +110,8 @@ namespace libnbt {
     public:
         TagFloat(std::string key);
 
+        TagFloat(bool _inlist);
+
         float getValue();
 
         void setValue(float val);
@@ -105,6 +122,8 @@ namespace libnbt {
         double value;
     public:
         TagDouble(std::string key);
+
+        TagDouble(bool _inlist);
 
         double getValue();
 
@@ -117,6 +136,8 @@ namespace libnbt {
         int size;
     public:
         TagByteArray(std::string key, int size);
+
+        TagByteArray(bool _inlist, int size);
 
         int8_t *getValue();
 
@@ -131,6 +152,8 @@ namespace libnbt {
     public:
         TagString(std::string key);
 
+        TagString(bool _inlist);
+
         std::string getValue();
 
         void setValue(std::string val);
@@ -142,6 +165,8 @@ namespace libnbt {
         std::vector<Tag *> list;
     public:
         TagList(std::string key, TagType listType);
+
+        TagList(bool _inlist, TagType listType);
 
         TagType getListType();
 
@@ -158,6 +183,8 @@ namespace libnbt {
     public:
         TagCompound(std::string key);
 
+        TagCompound(bool _inlist);
+
         std::vector<Tag *> getValue();
 
         void appendValue(Tag *val);
@@ -172,6 +199,8 @@ namespace libnbt {
     public:
         TagIntArray(std::string key, int size);
 
+        TagIntArray(bool _inlist, int size);
+
         int getSize();
 
         int32_t *getValue();
@@ -180,6 +209,8 @@ namespace libnbt {
     };
 
     std::ostream &operator<<(std::ostream &out, Tag *_tag);
+
+    std::ostream &operator<<(std::ostream &out, TagType type);
 
 }
 

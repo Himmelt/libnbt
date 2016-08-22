@@ -1,6 +1,7 @@
 /build
 /packages
 /.vs
+/Debug
 
 libnbt.VC.db
 libnbt.vcxproj.user

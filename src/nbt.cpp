@@ -6,12 +6,20 @@
 #include "../include/nbt.h"
 
 namespace libnbt {
+
     NBT::NBT() {
     }
 
     NBT::NBT(std::string filename) {
         open(filename);
+        std::cout << "buff point @ open:" << static_cast<const void *>(buff) << std::endl;
         seek = buff;
+        std::cout << "seek point @ open:" << static_cast<const void *>(seek) << std::endl;
+    }
+
+    NBT::NBT(int8_t *buff, unsigned int size) {
+        NBT::buff = NBT::seek = buff;
+        NBT::size = size;
     }
 
     NBT::~NBT() {
@@ -50,6 +58,7 @@ namespace libnbt {
                     } else {
                         std::cout << "return size:" << code << std::endl;
                         std::cout << "uncompress gzip success!" << std::endl;
+                        std::cout << "buff point:" << static_cast<const void *>(buff) << std::endl;
                     }
                 } else {
                     std::cout << "read gzip failed!" << std::endl;
@@ -137,12 +146,25 @@ namespace libnbt {
         return data;
     }
 
-    TagCompound *NBT::prase(std::string key) {
+    TagCompound *NBT::prase() {
+        TagType rootType = (TagType) readByte();
+        if (rootType != TagType::TypeCompound) {
+            return nullptr;
+        }
+        int rootKeySize = readShort();
+        std::cout << "rootKeySize:" << rootKeySize << " , seek-position:" << (NBT::seek - NBT::buff) << std::endl;
+        return prase(readString(rootKeySize), false);
+    }
+
+    TagCompound *NBT::prase(std::string key, bool _inlist) {
 
         TagCompound *compound = new TagCompound(key);
 
-        while ((unsigned int) (seek - buff) <= size) {
+        compound->setInlist(_inlist);
+
+        while ((unsigned int) (seek - buff) < size) {
             TagType type = (TagType) readByte();
+            std::cout << "type@praseC:" << type << std::endl;
             switch (type) {
                 case TagType::TypeEnd: {
                     return compound;
@@ -177,6 +199,7 @@ namespace libnbt {
                     TagLong *tag = new TagLong(nextKey);
                     tag->setValue(readLong());
                     compound->appendValue(tag);
+                    break;
                 }
                 case TagType::TypeFloat: {
                     int length = readShort();
@@ -225,15 +248,15 @@ namespace libnbt {
                     int length = readShort();
                     std::string nextKey = readString(length);
                     TagType listType = (TagType) readByte();
-                    int size = readShort();
-                    TagList *tag = prase(nextKey, size, listType);
+                    int size = readInt();
+                    TagList *tag = prase(nextKey, size, listType, false);
                     compound->appendValue(tag);
                     break;
                 }
                 case TagType::TypeCompound: {
                     int length = readShort();
                     std::string nextKey = readString(length);
-                    TagCompound *tag = prase(nextKey);
+                    TagCompound *tag = prase(nextKey, false);
                     compound->appendValue(tag);
                     break;
                 }
@@ -242,8 +265,12 @@ namespace libnbt {
         return compound;
     }
 
-    TagList *NBT::prase(std::string key, int size, TagType listType) {
+    TagList *NBT::prase(std::string key, int size, TagType listType, bool _inlist) {
+
         TagList *tagList = new TagList(key, listType);
+
+        tagList->setInlist(_inlist);
+
         switch (listType) {
             case TagType::TypeEnd: {
                 std::cout << "Maybe Something Error!!" << std::endl;
@@ -251,7 +278,7 @@ namespace libnbt {
             }
             case TagType::TypeByte: {
                 for (int i = 0; i < size; i++) {
-                    TagByte *tag = new TagByte("list");
+                    TagByte *tag = new TagByte(true);
                     tag->setValue(readByte());
                     tagList->appendValue(tag);
                 }
@@ -259,7 +286,7 @@ namespace libnbt {
             }
             case TagType::TypeShort: {
                 for (int i = 0; i < size; i++) {
-                    TagShort *tag = new TagShort("list");
+                    TagShort *tag = new TagShort(true);
                     tag->setValue(readShort());
                     tagList->appendValue(tag);
                 }
@@ -267,7 +294,7 @@ namespace libnbt {
             }
             case TagType::TypeInt: {
                 for (int i = 0; i < size; i++) {
-                    TagInt *tag = new TagInt("list");
+                    TagInt *tag = new TagInt(true);
                     tag->setValue(readInt());
                     tagList->appendValue(tag);
                 }
@@ -275,7 +302,7 @@ namespace libnbt {
             }
             case TagType::TypeLong: {
                 for (int i = 0; i < size; i++) {
-                    TagLong *tag = new TagLong("list");
+                    TagLong *tag = new TagLong(true);
                     tag->setValue(readLong());
                     tagList->appendValue(tag);
                 }
@@ -283,7 +310,7 @@ namespace libnbt {
             }
             case TagType::TypeFloat: {
                 for (int i = 0; i < size; i++) {
-                    TagFloat *tag = new TagFloat("list");
+                    TagFloat *tag = new TagFloat(true);
                     tag->setValue(readFloat());
                     tagList->appendValue(tag);
                 }
@@ -291,7 +318,7 @@ namespace libnbt {
             }
             case TagType::TypeDouble: {
                 for (int i = 0; i < size; i++) {
-                    TagDouble *tag = new TagDouble("list");
+                    TagDouble *tag = new TagDouble(true);
                     tag->setValue(readDouble());
                     tagList->appendValue(tag);
                 }
@@ -300,7 +327,7 @@ namespace libnbt {
             case TagType::TypeByteArray: {
                 for (int i = 0; i < size; i++) {
                     int arraySize = readInt();
-                    TagByteArray *tag = new TagByteArray("list", arraySize);
+                    TagByteArray *tag = new TagByteArray(true, arraySize);
                     tag->setValue(readByteArray(arraySize));
                     tagList->appendValue(tag);
                 }
@@ -309,7 +336,7 @@ namespace libnbt {
             case TagType::TypeIntArray: {
                 for (int i = 0; i < size; i++) {
                     int arraySize = readInt();
-                    TagIntArray *tag = new TagIntArray("list", arraySize);
+                    TagIntArray *tag = new TagIntArray(true, arraySize);
                     tag->setValue(readIntArray(arraySize));
                     tagList->appendValue(tag);
                 }
@@ -318,7 +345,7 @@ namespace libnbt {
             case TagType::TypeString: {
                 for (int i = 0; i < size; i++) {
                     int length = readShort();
-                    TagString *tag = new TagString("list");
+                    TagString *tag = new TagString(true);
                     tag->setValue(readString(length));
                     tagList->appendValue(tag);
                 }
@@ -328,14 +355,14 @@ namespace libnbt {
                 for (int i = 0; i < size; i++) {
                     TagType type = (TagType) readByte();
                     int listSize = readInt();
-                    TagList *tag = prase("list", listSize, type);
+                    TagList *tag = prase("list", listSize, type, true);
                     tagList->appendValue(tag);
                 }
                 break;
             }
             case TagType::TypeCompound: {
                 for (int i = 0; i < size; i++) {
-                    TagCompound *tag = prase("compound");
+                    TagCompound *tag = prase("compound", true);
                     tagList->appendValue(tag);
                 }
                 break;
@@ -344,8 +371,10 @@ namespace libnbt {
         return tagList;
     }
 
-    NBT::NBT(int8_t *buff, unsigned int size) {
-        NBT::buff = NBT::seek = buff;
-        NBT::size = size;
+    void NBT::print() {
+        for (int i = 0; i < NBT::size; i++) {
+            std::cout << std::hex << (0xff & NBT::buff[i]) << " ";
+        }
     }
+
 }
