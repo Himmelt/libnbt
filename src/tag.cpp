@@ -318,7 +318,7 @@ namespace libnbt {
                     out << "\"" << tag->getKey() << "\":";
                 out << "[";
                 for (int i = 0; i < arraySize; i++) {
-                    out << std::hex << (0xff & tag->getValue()[i]);
+                    out << (0xff & tag->getValue()[i]);
                     if (i < arraySize - 1)out << ",";
                 }
                 out << "]";

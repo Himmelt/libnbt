@@ -45,8 +45,7 @@ namespace libnbt {
                 size = (head[1] & 0xff | size) << 8;
                 size = head[0] & 0xff | size;
 
-                std::cout << "i size:" << std::hex << (head[3] & 0xff) << (head[2] & 0xff) << (head[1] & 0xff)
-                          << (head[0] & 0xff) << std::endl;
+                printf("i size:%x,%x,%x,%x\n", head[3] & 0xff, head[2] & 0xff, head[1] & 0xff, head[0] & 0xff);
 
                 gzFile gzfile = gzopen(filename.c_str(), "rb");
                 if (gztell(gzfile) >= 0) {
@@ -56,7 +55,7 @@ namespace libnbt {
                         std::cout << "code:" << code << std::endl;
                         std::cout << "uncompress gzip failed!" << std::endl;
                     } else {
-                        std::cout << "return size:" << code << std::endl;
+                        std::cout << "return size(Byte):" << code << std::endl;
                         std::cout << "uncompress gzip success!" << std::endl;
                         std::cout << "buff point:" << static_cast<const void *>(buff) << std::endl;
                     }
@@ -82,42 +81,46 @@ namespace libnbt {
     }
 
     int8_t NBT::readByte() {
-        if (size > 0 && (unsigned int) (seek - buff) <= size) {
-            return seek++[0];
-        } else {
-            return 0;
-        }
+        return seek++[0];
     }
 
     int16_t NBT::readShort() {
-        int16_t data = readByte();
-        data = (data << 8) | readByte();
+        int16_t data = 0;
+        char temp[2] = {seek[1], seek[0]};
+        memcpy(&data, temp, 2);
+        seek += 2;
         return data;
     }
 
     int32_t NBT::readInt() {
-        int32_t data = readShort();
-        data = (data << 16) | readShort();
+        int32_t data = 0;
+        char temp[4] = {seek[3], seek[2], seek[1], seek[0]};
+        memcpy(&data, temp, 4);
+        seek += 4;
         return data;
     }
 
     int64_t NBT::readLong() {
-        int64_t data = readInt();
-        data = (data << 32) | readInt();
+        int64_t data = 0;
+        char temp[8] = {seek[7], seek[6], seek[5], seek[4], seek[3], seek[2], seek[1], seek[0]};
+        memcpy(&data, temp, 8);
+        seek = seek + 8;
         return data;
     }
 
     float NBT::readFloat() {
-        int32_t temp = readInt();
         float data = 0;
-        memcpy(&data, &temp, 4);
+        char temp[4] = {seek[3], seek[2], seek[1], seek[0]};
+        memcpy(&data, temp, 4);
+        seek += 4;
         return data;
     }
 
     double NBT::readDouble() {
-        int64_t temp = readLong();
         double data = 0;
-        memcpy(&data, &temp, 8);
+        char temp[8] = {seek[7], seek[6], seek[5], seek[4], seek[3], seek[2], seek[1], seek[0]};
+        memcpy(&data, temp, 8);
+        seek += 8;
         return data;
     }
 
@@ -134,15 +137,13 @@ namespace libnbt {
     }
 
     std::string NBT::readString(int n) {
-        if (n == 0) return "";
-        int8_t *buff = nullptr;
-        buff = new int8_t[n + 1];
-        for (int i = 0; i < n; i++) {
-            buff[i] = readByte();
-        }
+        if (n <= 0) return "";
+        char *buff = new char[n + 1];
+        memcpy(buff, seek, (size_t) n);
         buff[n] = 0;
-        std::string data = (char *) buff;
+        std::string data = buff;
         delete buff;
+        seek += n;
         return data;
     }
 
@@ -164,7 +165,8 @@ namespace libnbt {
 
         while ((unsigned int) (seek - buff) < size) {
             TagType type = (TagType) readByte();
-            std::cout << "type@praseC:" << type << std::endl;
+            printf("%d-%lu-", type, seek - buff);
+            std::cout << "type@Comp:" << type << "<<" << std::endl;
             switch (type) {
                 case TagType::TypeEnd: {
                     return compound;
@@ -194,18 +196,21 @@ namespace libnbt {
                     break;
                 }
                 case TagType::TypeLong: {
-                    int length = readShort();
+                    int length = (int) readShort();
                     std::string nextKey = readString(length);
+                    std::cout << "len:" << length << ",nextKey:" << nextKey << std::endl;
                     TagLong *tag = new TagLong(nextKey);
                     tag->setValue(readLong());
+                    std::cout << "set value:" << tag->getValue() << std::endl;
                     compound->appendValue(tag);
                     break;
                 }
                 case TagType::TypeFloat: {
                     int length = readShort();
+                    printf("float length:%d\n", length);
                     std::string nextKey = readString(length);
-                    TagLong *tag = new TagLong(nextKey);
-                    tag->setValue(readLong());
+                    TagFloat *tag = new TagFloat(nextKey);
+                    tag->setValue(readFloat());
                     compound->appendValue(tag);
                     break;
                 }
@@ -373,7 +378,7 @@ namespace libnbt {
 
     void NBT::print() {
         for (int i = 0; i < NBT::size; i++) {
-            std::cout << std::hex << (0xff & NBT::buff[i]) << " ";
+            std::cout << (0xff & NBT::buff[i]) << " ";
         }
     }
 
