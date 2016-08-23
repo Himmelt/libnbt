@@ -9,6 +9,7 @@
 #pragma once
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -210,7 +211,11 @@ namespace libnbt {
 
     std::ostream &operator<<(std::ostream &out, Tag *_tag);
 
+    std::fstream &operator<<(std::fstream &out, Tag *_tag);
+
     std::ostream &operator<<(std::ostream &out, TagType type);
+
+    std::fstream &operator<<(std::fstream &out, TagType type);
 
 }
 

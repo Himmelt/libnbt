@@ -15,6 +15,9 @@ namespace libnbt {
         std::cout << "buff point @ open:" << static_cast<const void *>(buff) << std::endl;
         seek = buff;
         std::cout << "seek point @ open:" << static_cast<const void *>(seek) << std::endl;
+
+        tag = prase();
+
     }
 
     NBT::NBT(int8_t *buff, unsigned int size) {
@@ -48,6 +51,7 @@ namespace libnbt {
                 printf("i size:%x,%x,%x,%x\n", head[3] & 0xff, head[2] & 0xff, head[1] & 0xff, head[0] & 0xff);
 
                 gzFile gzfile = gzopen(filename.c_str(), "rb");
+
                 if (gztell(gzfile) >= 0) {
                     buff = new int8_t[size];
                     int code = gzread(gzfile, buff, size);
@@ -80,6 +84,18 @@ namespace libnbt {
         filebuf.close();
     }
 
+    void NBT::write(std::string filename, bool isGzip) {
+
+        if (isGzip) {
+            gzFile gzfile = gzopen(filename.c_str(), "wb");
+
+        }
+
+        std::filebuf filebuf;
+        filebuf.open(filename, std::ios::out | std::ios::binary);
+
+
+    }
     int8_t NBT::readByte() {
         return seek++[0];
     }
@@ -278,7 +294,7 @@ namespace libnbt {
 
         switch (listType) {
             case TagType::TypeEnd: {
-                std::cout << "Maybe Something Error!!" << std::endl;
+                std::cout << "Empty list!!" << std::endl;
                 break;
             }
             case TagType::TypeByte: {
@@ -378,7 +394,7 @@ namespace libnbt {
 
     void NBT::print() {
         for (int i = 0; i < NBT::size; i++) {
-            std::cout << (0xff & NBT::buff[i]) << " ";
+            printf("%02x ", 0xff & buff[i]);
         }
     }
 

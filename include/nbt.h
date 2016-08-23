@@ -20,6 +20,9 @@ namespace libnbt {
         int8_t *buff = nullptr;
         int8_t *seek = nullptr;
         unsigned int size = 0;
+
+        Tag *tag = nullptr;
+
     public:
         NBT();
 
@@ -32,6 +35,8 @@ namespace libnbt {
         void print();
 
         void open(std::string filename);
+
+        void write(std::string filename, bool isGzip);
 
         int8_t readByte();
 
