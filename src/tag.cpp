@@ -8,349 +8,148 @@
 namespace libnbt {
 
     Tag::Tag() {
-        Tag::key = "root";
+        _inlist = true;
     }
 
-    Tag::Tag(std::string key) {
-        Tag::key = key;
+    Tag::Tag(string _key) {
+        key = _key;
+        _inlist = false;
     }
 
-    Tag::~Tag() {
+    bool Tag::inlist() {
+        return _inlist;
     }
 
-    void Tag::setKey(std::string key) {
-        Tag::key = key;
-    }
-
-    std::string Tag::getKey() {
+    string Tag::getKey() {
         return key;
     }
 
-    void Tag::setType(TagType type) {
-        Tag::type = type;
+    void Tag::setKey(string _key) {
+        key = _key;
     }
 
-    TagType Tag::getType() {
+    Type Tag::getType() {
         return type;
     }
 
-    bool Tag::isInlist() {
-        return inlist;
+    void Tag::setType(Type _type) {
+        type = _type;
     }
 
-    void Tag::setInlist(bool _inlist) {
-        inlist = _inlist;
+    TagComp::TagComp() : Tag() {
+        setType(Type::Comp);
     }
 
-    Tag::Tag(bool _inlist) {
-        Tag();
-        inlist = _inlist;
+    TagComp::TagComp(Type _ltype) : Tag() {
+        setType(Type::List);
+        ltype = _ltype;
     }
 
-    TagByte::TagByte(std::string key) : Tag(key) {
-        setType(TagType::TypeByte);
+    TagComp::TagComp(string _key) : Tag(_key) {
+        setType(Type::Comp);
     }
 
-    int8_t TagByte::getValue() {
-        return value;
+    TagComp::TagComp(string _key, Type _ltype) : Tag(_key) {
+        setType(Type::List);
+        ltype = _ltype;
     }
 
-    void TagByte::setValue(int8_t val) {
-        value = val;
+    vector<Tag *> &TagComp::getVal() {
+        return val;
     }
 
-    TagByte::TagByte(bool _inlist) : Tag(_inlist) {
-        setType(TagType::TypeByte);
-    }
-
-    int16_t TagShort::getValue() {
-        return value;
-    }
-
-    void TagShort::setValue(int16_t val) {
-        value = val;
-    }
-
-    TagShort::TagShort(std::string key) : Tag(key) {
-        setType(TagType::TypeShort);
-    }
-
-    TagShort::TagShort(bool _inlist) : Tag(_inlist) {
-        setType(TagType::TypeShort);
-    }
-
-    int32_t TagInt::getValue() {
-        return value;
-    }
-
-    void TagInt::setValue(int32_t val) {
-        value = val;
-    }
-
-    TagInt::TagInt(std::string key) : Tag(key) {
-        setType(TagType::TypeInt);
-    }
-
-    TagInt::TagInt(bool _inlist) : Tag(_inlist) {
-        setType(TagType::TypeInt);
-    }
-
-    int64_t TagLong::getValue() {
-        return value;
-    }
-
-    void TagLong::setValue(int64_t val) {
-        value = val;
-    }
-
-    TagLong::TagLong(std::string key) : Tag(key) {
-        setType(TagType::TypeLong);
-    }
-
-    TagLong::TagLong(bool _inlist) : Tag(_inlist) {
-        setType(TagType::TypeLong);
-    }
-
-    float TagFloat::getValue() {
-        return value;
-    }
-
-    void TagFloat::setValue(float val) {
-        value = val;
-    }
-
-    TagFloat::TagFloat(std::string key) : Tag(key) {
-        setType(TagType::TypeFloat);
-    }
-
-    TagFloat::TagFloat(bool _inlist) : Tag(_inlist) {
-        setType(TagType::TypeFloat);
-    }
-
-    double TagDouble::getValue() {
-        return value;
-    }
-
-    void TagDouble::setValue(double val) {
-        value = val;
-    }
-
-    TagDouble::TagDouble(std::string key) : Tag(key) {
-        setType(TagType::TypeDouble);
-    }
-
-    TagDouble::TagDouble(bool _inlist) : Tag(_inlist) {
-        setType(TagType::TypeDouble);
-    }
-
-    int8_t *TagByteArray::getValue() {
-        return value;
-    }
-
-    void TagByteArray::setValue(int8_t *val) {
-        value = val;
-    }
-
-    TagByteArray::TagByteArray(std::string key, int size) : Tag(key) {
-        setType(TagType::TypeByteArray);
-        TagByteArray::size = size;
-    }
-
-    int TagByteArray::getSize() {
-        return size;
-    }
-
-    TagByteArray::TagByteArray(bool _inlist, int size) : Tag(_inlist) {
-        setType(TagType::TypeByteArray);
-        TagByteArray::size = size;
-    }
-
-    std::string TagString::getValue() {
-        return value;
-    }
-
-    void TagString::setValue(std::string val) {
-        value = val;
-    }
-
-    TagString::TagString(std::string key) : Tag(key) {
-        setType(TagType::TypeString);
-    }
-
-    TagString::TagString(bool _inlist) : Tag(_inlist) {
-        setType(TagType::TypeString);
-    }
-
-    void TagList::appendValue(Tag *val) {
-        list.push_back(val);
-    }
-
-    void TagList::deleteValue(int index) {
-        Tag *tag = list[index];
-        try {
-            delete tag;
-        }
-        catch (int) {
-            std::cout << "Dynamic Data Erase Error!!" << std::endl;
-        }
-        list.erase(list.begin() + index);
-    }
-
-    TagList::TagList(std::string key, TagType listType) : Tag(key) {
-        setType(TagType::TypeList);
-        TagList::listType = listType;
-    }
-
-    TagType TagList::getListType() {
-        return listType;
-    }
-
-    std::vector<Tag *> TagList::getValue() {
-        return list;
-    }
-
-    TagList::TagList(bool _inlist, TagType listType) : Tag(_inlist) {
-        setType(TagType::TypeList);
-        TagList::listType = listType;
-    }
-
-    void TagCompound::appendValue(Tag *val) {
-        compound.push_back(val);
-    }
-
-    void TagCompound::deleteValue(int index) {
-        Tag *tag = compound[index];
-        try {
-            delete tag;
-        }
-        catch (int) {
-            std::cout << "Dynamic Data Erase Error!!" << std::endl;
-        }
-        compound.erase(compound.begin() + index);
-    }
-
-    TagCompound::TagCompound(std::string key) : Tag(key) {
-        setType(TagType::TypeCompound);
-    }
-
-    std::vector<Tag *> TagCompound::getValue() {
-        return compound;
-    }
-
-    TagCompound::TagCompound(bool _inlist) : Tag(_inlist) {
-        setType(TagType::TypeCompound);
-    }
-
-    int32_t *TagIntArray::getValue() {
-        return value;
-    }
-
-    void TagIntArray::setValue(int32_t *val) {
-        value = val;
-    }
-
-    TagIntArray::TagIntArray(std::string key, int size) : Tag(key) {
-        setType(TagType::TypeIntArray);
-        TagIntArray::size = size;
-    }
-
-    int TagIntArray::getSize() {
-        return size;
-    }
-
-    TagIntArray::TagIntArray(bool _inlist, int size) : Tag(_inlist) {
-        setType(TagType::TypeIntArray);
-        TagIntArray::size = size;
+    void TagComp::addVal(Tag *tag) {
+        val.push_back(tag);
     }
 
     std::ostream &operator<<(std::ostream &out, Tag *_tag) {
 
         switch (_tag->getType()) {
-            case TagType::TypeEnd: {
+            case Type::End: {
                 out << "If you see this,it must be sth wrong!";
                 break;
             }
-            case TagType::TypeByte: {
+            case Type::Byte: {
                 TagByte *tag = (TagByte *) _tag;
-                if (!tag->isInlist())
+                if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
-                out << (0xff & tag->getValue());
+                out << (0xff & tag->getVal());
                 break;
             }
-            case TagType::TypeShort: {
+            case Type::Short: {
                 TagShort *tag = (TagShort *) _tag;
-                if (!tag->isInlist())
+                if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
-                out << tag->getValue();
+                out << tag->getVal();
                 break;
             }
-            case TagType::TypeInt: {
+            case Type::Int: {
                 TagInt *tag = (TagInt *) _tag;
-                if (!tag->isInlist())
+                if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
-                out << tag->getValue();
+                out << tag->getVal();
                 break;
             }
-            case TagType::TypeLong: {
+            case Type::Long: {
                 TagLong *tag = (TagLong *) _tag;
-                if (!tag->isInlist())
+                if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
-                out << tag->getValue();
+                out << tag->getVal();
                 break;
             }
-            case TagType::TypeFloat: {
+            case Type::Float: {
                 TagFloat *tag = (TagFloat *) _tag;
-                if (!tag->isInlist())
+                if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
-                out << tag->getValue();
+                out << tag->getVal();
                 break;
             }
-            case TagType::TypeDouble: {
+            case Type::Double: {
                 TagDouble *tag = (TagDouble *) _tag;
-                if (!tag->isInlist())
+                if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
-                out << tag->getValue();
+                out << tag->getVal();
                 break;
             }
-            case TagType::TypeByteArray: {
-                TagByteArray *tag = (TagByteArray *) _tag;
-                int arraySize = tag->getSize();
-                if (!tag->isInlist())
+            case Type::BytA: {
+                TagBytA *tag = (TagBytA *) _tag;
+                size_t arraySize = tag->getVal().size();
+                if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
                 out << "[";
                 for (int i = 0; i < arraySize; i++) {
-                    out << (0xff & tag->getValue()[i]);
+                    out << (0xff & tag->getVal()[i]);
                     if (i < arraySize - 1)out << ",";
                 }
                 out << "]";
                 break;
             }
-            case TagType::TypeIntArray: {
-                TagIntArray *tag = (TagIntArray *) _tag;
-                int arraySize = tag->getSize();
-                if (!tag->isInlist())
+            case Type::IntA: {
+                TagIntA *tag = (TagIntA *) _tag;
+                size_t arraySize = tag->getVal().size();
+                if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
                 out << "[";
                 for (int i = 0; i < arraySize; i++) {
-                    out << tag->getValue()[i];
+                    out << tag->getVal()[i];
                     if (i < arraySize - 1)out << ",";
                 }
                 out << "]";
                 break;
             }
-            case TagType::TypeString: {
+            case Type::String: {
                 TagString *tag = (TagString *) _tag;
-                if (!tag->isInlist())
+                if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
-                out << "\"" << tag->getValue() << "\"";
+                out << "\"" << tag->getVal() << "\"";
                 break;
             }
-            case TagType::TypeList: {
-                TagList *tag = (TagList *) _tag;
-                std::vector<Tag *> list = tag->getValue();
+            case Type::List: {
+                TagComp *tag = (TagComp *) _tag;
+                std::vector<Tag *> list = tag->getVal();
                 int listSize = (int) list.size();
 
-                if (!tag->isInlist())
+                if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
 
                 out << "[";
@@ -362,19 +161,19 @@ namespace libnbt {
                 out << "]";
                 break;
             }
-            case TagType::TypeCompound: {
-                TagCompound *tag = (TagCompound *) _tag;
-                std::vector<Tag *> compound = tag->getValue();
-                int compoundSize = (int) compound.size();
+            case Type::Comp: {
+                TagComp *tag = (TagComp *) _tag;
+                std::vector<Tag *> Comp = tag->getVal();
+                int CompSize = (int) Comp.size();
 
-                if (!tag->isInlist())
+                if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
 
                 out << "{";
 
-                for (int i = 0; i < compoundSize; i++) {
-                    out << compound[i];
-                    if (i < compoundSize - 1) out << ",";
+                for (int i = 0; i < CompSize; i++) {
+                    out << Comp[i];
+                    if (i < CompSize - 1) out << ",";
                 }
                 out << "}";
                 break;
@@ -386,195 +185,194 @@ namespace libnbt {
     std::fstream &operator<<(std::fstream &out, Tag *_tag) {
 
         switch (_tag->getType()) {
-            case TagType::TypeEnd: {
+            case Type::End: {
                 out << "If you see this,it must be sth wrong!";
                 break;
             }
-            case TagType::TypeByte: {
+            case Type::Byte: {
                 TagByte *tag = (TagByte *) _tag;
-                if (!tag->isInlist()) {
+                if (!tag->inlist()) {
                     std::string key = tag->getKey();
-                    out << TagType::TypeByte << (int16_t) key.size();
+                    out << Type::Byte << (int16_t) key.size();
 
                     //out.write((char*)(&(key.size())))
                     out.write(key.c_str(), key.size());
                 }
-                out << tag->getValue();
+                out << tag->getVal();
                 break;
             }
-            case TagType::TypeShort: {
+            case Type::Short: {
                 TagShort *tag = (TagShort *) _tag;
-                if (!tag->isInlist()) {
+                if (!tag->inlist()) {
                     std::string key = tag->getKey();
-                    out << TagType::TypeShort << (int16_t) key.size();
+                    out << Type::Short << (int16_t) key.size();
                     out.write(key.c_str(), key.size());
                 }
-                out << tag->getValue();
+                out << tag->getVal();
                 break;
             }
-            case TagType::TypeInt: {
+            case Type::Int: {
                 TagInt *tag = (TagInt *) _tag;
-                if (!tag->isInlist()) {
+                if (!tag->inlist()) {
                     std::string key = tag->getKey();
-                    out << TagType::TypeInt << (int16_t) key.size();
+                    out << Type::Int << (int16_t) key.size();
                     out.write(key.c_str(), key.size());
                 }
-                out << tag->getValue();
+                out << tag->getVal();
                 break;
             }
-            case TagType::TypeLong: {
+            case Type::Long: {
                 TagLong *tag = (TagLong *) _tag;
-                if (!tag->isInlist()) {
+                if (!tag->inlist()) {
                     std::string key = tag->getKey();
-                    out << TagType::TypeLong << (int16_t) key.size();
+                    out << Type::Long << (int16_t) key.size();
                     out.write(key.c_str(), key.size());
                 }
-                out << tag->getValue();
+                out << tag->getVal();
                 break;
             }
-            case TagType::TypeFloat: {
+            case Type::Float: {
                 TagFloat *tag = (TagFloat *) _tag;
-                if (!tag->isInlist()) {
+                if (!tag->inlist()) {
                     std::string key = tag->getKey();
-                    out << TagType::TypeFloat << (int16_t) key.size();
+                    out << Type::Float << (int16_t) key.size();
                     out.write(key.c_str(), key.size());
                 }
-                out << tag->getValue();
+                out << tag->getVal();
                 break;
             }
-            case TagType::TypeDouble: {
+            case Type::Double: {
                 TagDouble *tag = (TagDouble *) _tag;
-                if (!tag->isInlist()) {
+                if (!tag->inlist()) {
                     std::string key = tag->getKey();
-                    out << TagType::TypeDouble << (int16_t) key.size();
+                    out << Type::Double << (int16_t) key.size();
                     out.write(key.c_str(), key.size());
                 }
-                out << tag->getValue();
+                out << tag->getVal();
                 break;
             }
-            case TagType::TypeByteArray: {
-                TagByteArray *tag = (TagByteArray *) _tag;
-                int32_t arraySize = (int32_t) tag->getSize();
-                if (!tag->isInlist()) {
+            case Type::BytA: {
+                TagBytA *tag = (TagBytA *) _tag;
+                int32_t arraySize = (int32_t) tag->getVal().size();
+                if (!tag->inlist()) {
                     std::string key = tag->getKey();
-                    out << TagType::TypeByteArray << (int16_t) key.size();
-                    out.write(key.c_str(), key.size());
-                }
-                out << arraySize;
-                for (int i = 0; i < arraySize; i++) {
-                    out << tag->getValue()[i];
-                }
-                break;
-            }
-            case TagType::TypeIntArray: {
-                TagIntArray *tag = (TagIntArray *) _tag;
-                int32_t arraySize = (int32_t) tag->getSize();
-                if (!tag->isInlist()) {
-                    std::string key = tag->getKey();
-                    out << TagType::TypeIntArray << (int16_t) key.size();
+                    out << Type::BytA << (int16_t) key.size();
                     out.write(key.c_str(), key.size());
                 }
                 out << arraySize;
                 for (int i = 0; i < arraySize; i++) {
-                    out << tag->getValue()[i];
+                    out << tag->getVal()[i];
                 }
                 break;
             }
-            case TagType::TypeString: {
+            case Type::IntA: {
+                TagIntA *tag = (TagIntA *) _tag;
+                int32_t arraySize = (int32_t) tag->getVal().size();
+                if (!tag->inlist()) {
+                    std::string key = tag->getKey();
+                    out << Type::IntA << (int16_t) key.size();
+                    out.write(key.c_str(), key.size());
+                }
+                out << arraySize;
+                for (int i = 0; i < arraySize; i++) {
+                    out << tag->getVal()[i];
+                }
+                break;
+            }
+            case Type::String: {
                 TagString *tag = (TagString *) _tag;
-                std::string value = tag->getValue();
-                if (!tag->isInlist()) {
+                std::string value = tag->getVal();
+                if (!tag->inlist()) {
                     std::string key = tag->getKey();
-                    out << TagType::TypeString << (int16_t) key.size();
+                    out << Type::String << (int16_t) key.size();
                     out.write(key.c_str(), key.size());
                 }
                 out.write(value.c_str(), value.size());
                 break;
             }
-            case TagType::TypeList: {
-                TagList *tag = (TagList *) _tag;
-                std::vector<Tag *> list = tag->getValue();
+            case Type::List: {
+                TagComp *tag = (TagComp *) _tag;
+                std::vector<Tag *> list = tag->getVal();
                 int32_t listSize = (int32_t) list.size();
 
-                if (!tag->isInlist()) {
+                if (!tag->inlist()) {
                     std::string key = tag->getKey();
-                    out << TagType::TypeList << (int16_t) key.size();
+                    out << Type::List << (int16_t) key.size();
                     out.write(key.c_str(), key.size());
                 }
 
-                out << tag->getListType() << listSize;
+                out << tag->getType() << listSize;
 
                 for (int i = 0; i < listSize; i++) {
                     out << list[i];
                 }
                 break;
             }
-            case TagType::TypeCompound: {
-                TagCompound *tag = (TagCompound *) _tag;
-                std::vector<Tag *> compound = tag->getValue();
-                int compoundSize = (int) compound.size();
+            case Type::Comp: {
+                TagComp *tag = (TagComp *) _tag;
+                std::vector<Tag *> Comp = tag->getVal();
+                int CompSize = (int) Comp.size();
 
-                if (!tag->isInlist()) {
+                if (!tag->inlist()) {
                     std::string key = tag->getKey();
-                    out << TagType::TypeCompound << (int16_t) key.size();
+                    out << Type::Comp << (int16_t) key.size();
                     out.write(key.c_str(), key.size());
                 }
 
-                for (int i = 0; i < compoundSize; i++) {
-                    out << compound[i];
+                for (int i = 0; i < CompSize; i++) {
+                    out << Comp[i];
                 }
-                out << TagType::TypeEnd;
+                out << Type::End;
                 break;
             }
         }
         return out;
     }
 
-    std::ostream &operator<<(std::ostream &out, TagType type) {
+    std::ostream &operator<<(std::ostream &out, Type type) {
         switch (type) {
-            case TagType::TypeEnd:
+            case Type::End:
                 out << "TypeEnd";
                 break;
-            case TagType::TypeByte:
+            case Type::Byte:
                 out << "TypeByte";
                 break;
-            case TagType::TypeShort:
+            case Type::Short:
                 out << "TypeShort";
                 break;
-            case TagType::TypeInt:
+            case Type::Int:
                 out << "TypeInt";
                 break;
-            case TagType::TypeLong:
+            case Type::Long:
                 out << "TypeLong";
                 break;
-            case TagType::TypeFloat:
+            case Type::Float:
                 out << "TypeFloat";
                 break;
-            case TagType::TypeDouble:
+            case Type::Double:
                 out << "TypeDouble";
                 break;
-            case TagType::TypeByteArray:
-                out << "TypeByteArray";
+            case Type::BytA:
+                out << "TypeByteA";
                 break;
-            case TagType::TypeString:
+            case Type::String:
                 out << "TypeString";
                 break;
-            case TagType::TypeList:
+            case Type::List:
                 out << "TypeList";
                 break;
-            case TagType::TypeCompound:
-                out << "TypeCompound";
+            case Type::Comp:
+                out << "TypeComp";
                 break;
-            case TagType::TypeIntArray:
+            case Type::IntA:
                 out << "TypeIntArray";
                 break;
         }
         return out;
     }
 
-    std::fstream &operator<<(std::fstream &out, TagType type) {
+    std::fstream &operator<<(std::fstream &out, Type type) {
         out << (0xff & (int8_t) type);
         return out;
     }
-
 }

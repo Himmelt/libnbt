@@ -14,55 +14,46 @@
 #include "tag.h"
 
 namespace libnbt {
+    using namespace std;
 
     class NBT {
     private:
-        int8_t *buff = nullptr;
-        int8_t *seek = nullptr;
-        unsigned int size = 0;
+        int8_t *buff;
+        int8_t *seek;
+        size_t size;
+        TagComp *tag = nullptr;
 
-        Tag *tag = nullptr;
+        int8_t read8();
+
+        int16_t read16();
+
+        int32_t read32();
+
+        int64_t read64();
+
+        float readfl();
+
+        double readbl();
+
+        string readstr(int n);
+
+        void open(string filename);
+
+        TagComp *prase(string _key, Type _type, Type _ltype, int32_t _lsize, bool _inlist);
 
     public:
-        NBT();
+        NBT(string filename);
 
-        NBT(std::string filename);
+        NBT(int8_t *_buff, size_t _size);
 
-        NBT(int8_t *buff, unsigned int size);
+        void printbuff();
 
-        ~NBT();
+        void printjson();
 
-        void print();
+        void write(string filename, bool isGzip);
 
-        void open(std::string filename);
-
-        void write(std::string filename, bool isGzip);
-
-        int8_t readByte();
-
-        int16_t readShort();
-
-        int32_t readInt();
-
-        int64_t readLong();
-
-        float readFloat();
-
-        double readDouble();
-
-        int8_t *readByteArray(int n);
-
-        int32_t *readIntArray(int n);
-
-        std::string readString(int n);
-
-        TagCompound *prase();
-
-        TagCompound *prase(std::string key, bool _inlist);
-
-        TagList *prase(std::string key, int size, TagType listType, bool _inlist);
+        TagComp *prase();
     };
-
 }
 
 #endif //LIBNBT_NBT_H

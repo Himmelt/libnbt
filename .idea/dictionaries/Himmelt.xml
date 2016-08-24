@@ -11,10 +11,17 @@
       <w>islist</w>
       <w>libnbt</w>
       <w>listbyte</w>
+      <w>lsize</w>
+      <w>ltype</w>
       <w>mcmap</w>
       <w>minecraft</w>
       <w>notroot</w>
       <w>prase</w>
+      <w>printbuff</w>
+      <w>printjson</w>
+      <w>readbl</w>
+      <w>readfl</w>
+      <w>readstr</w>
       <w>struct</w>
     </words>
   </dictionary>
