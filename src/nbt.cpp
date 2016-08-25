@@ -160,7 +160,12 @@ namespace libnbt {
 
             if (!islist) {
                 _ltype = (Type) read8();
-                nKey = readstr(read16());
+                if (_ltype != Type::End) {
+                    cout << "SEEK:" << seek - buff << "|Type:" << _ltype;
+                    int16_t len = read16();
+                    nKey = readstr(len);
+                    cout << "|Len:" << len << "|KEY:" << nKey << endl;
+                }
             }
 
             switch (_ltype) {
@@ -277,7 +282,9 @@ namespace libnbt {
     }
 
     void NBT::printjson() {
-
+        cout << "=====================json===============================" << endl;
+        cout << tag << endl;
+        cout << "=====================json===============================" << endl;
     }
 
     void NBT::write(string filename, bool isGzip) {

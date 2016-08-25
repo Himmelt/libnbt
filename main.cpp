@@ -18,6 +18,8 @@ int main() {
 
     nbt.printbuff();
 
+    nbt.printjson();
+
     return 0;
 
 }
