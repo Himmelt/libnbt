@@ -279,11 +279,12 @@ namespace libnbt {
         for (size_t i = 0; i < size; i++) {
             printf("%02x ", 0xff & buff[i]);
         }
+        printf("\n");
     }
 
     void NBT::printjson() {
         cout << "=====================json===============================" << endl;
-        cout << tag << endl;
+        cout << "{" << tag << "}" << endl;
         cout << "=====================json===============================" << endl;
     }
 

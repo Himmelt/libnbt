@@ -164,14 +164,16 @@ namespace libnbt {
             case Type::Comp: {
                 TagComp *tag = (TagComp *) _tag;
                 std::vector<Tag *> Comp = tag->getVal();
-                int CompSize = (int) Comp.size();
+                size_t CompSize = Comp.size();
+
+
 
                 if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
 
                 out << "{";
 
-                for (int i = 0; i < CompSize; i++) {
+                for (size_t i = 0; i < CompSize; i++) {
                     out << Comp[i];
                     if (i < CompSize - 1) out << ",";
                 }
