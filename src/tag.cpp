@@ -117,7 +117,7 @@ namespace libnbt {
                 if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
                 out << "[";
-                for (int i = 0; i < arraySize; i++) {
+                for (size_t i = 0; i < arraySize; i++) {
                     out << (0xff & tag->getVal()[i]);
                     if (i < arraySize - 1)out << ",";
                 }
@@ -130,7 +130,7 @@ namespace libnbt {
                 if (!tag->inlist())
                     out << "\"" << tag->getKey() << "\":";
                 out << "[";
-                for (int i = 0; i < arraySize; i++) {
+                for (size_t i = 0; i < arraySize; i++) {
                     out << tag->getVal()[i];
                     if (i < arraySize - 1)out << ",";
                 }

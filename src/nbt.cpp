@@ -6,7 +6,12 @@
 #include "../include/nbt.h"
 
 namespace libnbt {
-
+    //NBT::NBT()
+    //{
+    //    buff = seek = nullptr;
+    //    tag = nullptr;
+    //    size = 0;
+    //}
     NBT::NBT(string filename) {
         open(filename);
         seek = buff;
@@ -26,6 +31,7 @@ namespace libnbt {
     }
 
     int8_t NBT::read8() {
+        //printf("SEEK:%u\n", seek);
         return seek++[0];
     }
 
@@ -71,7 +77,7 @@ namespace libnbt {
 
     string NBT::readstr(int n) {
         string data = "";
-        while (--n) {
+        while (n--) {
             data.push_back(read8());
         }
         return data;
@@ -98,9 +104,14 @@ namespace libnbt {
 
                 printf("i size:%02x,%02x,%02x,%02x\n", head[3] & 0xff, head[2] & 0xff, head[1] & 0xff, head[0] & 0xff);
 
+
                 gzFile gzfile = gzopen(filename.c_str(), "rb");
 
                 if (gztell(gzfile) >= 0) {
+
+                    cout << "size:" << size << endl;
+                    printf(",,,%u,,,", size);
+
                     buff = new int8_t[size];
                     int code = gzread(gzfile, buff, (unsigned int) size);
                     if (code <= 0) {
@@ -144,6 +155,9 @@ namespace libnbt {
         if (islist && !_inlist) comp = new TagComp(_key, _ltype);
 
         while ((size_t) (seek - buff) < size) {
+
+            printf("==========================================\n");
+
             if (!islist) {
                 _ltype = (Type) read8();
                 nKey = readstr(read16());
@@ -201,6 +215,7 @@ namespace libnbt {
                     break;
                 }
                 case Type::String: {
+                    ///////////////////////////////
                     while (_lsize--) {
                         TagString *tag = islist ? new TagString() : new TagString(nKey);
                         int16_t size = read16();
@@ -214,7 +229,7 @@ namespace libnbt {
                         TagBytA *tag = islist ? new TagBytA() : new TagBytA(nKey);
                         int32_t size = read32();
                         vector<int8_t> val;
-                        while (--size) val.push_back(read8());
+                        while (size--) val.push_back(read8());
                         tag->setVal(val);
                         comp->addVal(tag);
                     }
@@ -225,7 +240,7 @@ namespace libnbt {
                         TagIntA *tag = islist ? new TagIntA() : new TagIntA(nKey);
                         int32_t size = read32();
                         vector<int32_t> val;
-                        while (--size) val.push_back(read32());
+                        while (size--) val.push_back(read32());
                         tag->setVal(val);
                         comp->addVal(tag);
                     }
@@ -250,6 +265,7 @@ namespace libnbt {
                 }
             }
             if (islist)return comp;
+            else _lsize = 1;
         }
         return comp;
     }

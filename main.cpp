@@ -12,6 +12,12 @@ using namespace libnbt;
 
 int main() {
 
+    NBT nbt("level.dat");
+
+    //TagComp * comp = nbt.prase();
+
+    nbt.printbuff();
+
     return 0;
 
 }

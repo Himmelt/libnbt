@@ -18,9 +18,9 @@ namespace libnbt {
 
     class NBT {
     private:
-        int8_t *buff;
-        int8_t *seek;
-        size_t size;
+        int8_t *buff = nullptr;
+        int8_t *seek = nullptr;
+        size_t size = 0;
         TagComp *tag = nullptr;
 
         int8_t read8();
@@ -42,6 +42,9 @@ namespace libnbt {
         TagComp *prase(string _key, Type _type, Type _ltype, int32_t _lsize, bool _inlist);
 
     public:
+
+        //NBT();
+
         NBT(string filename);
 
         NBT(int8_t *_buff, size_t _size);
