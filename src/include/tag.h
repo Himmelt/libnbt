@@ -65,6 +65,8 @@ namespace libnbt {
 
         NBTBase *copy() override;
 
+        NBTTagByte() {}
+
         NBTTagByte(uint8_t data) { this->data = data; }
 
         bool equals(NBTBase *tag) override;
