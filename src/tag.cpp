@@ -30,7 +30,7 @@ namespace libnbt {
             case 11:
                 return new NBTTagIntArray();
             default:
-                return NULL;
+                return nullptr;
         }
     }
 
@@ -38,20 +38,20 @@ namespace libnbt {
         if (typeid(tag) != typeid(this)) {
             return false;
         } else {
-            return this->getId() == tag->getId();
+            return this->getType() == tag->getType();
         }
     }
 
     string NBTTagShort::toString() {
-        return NULL;
+        return to_string(this->data) + "s";
     }
 
-    uint8_t NBTTagShort::getId() {
-        return NULL;
+    TAG_TYPE NBTTagShort::getType() {
+        return SHORT;
     }
 
     NBTBase *NBTTagShort::copy() {
-        return NULL;
+        return new NBTTagShort(this->data);
     }
 
     void NBTTagShort::write(uint8_t *data) {
@@ -62,16 +62,32 @@ namespace libnbt {
 
     }
 
-    string NBTTagInt::toString() {
-        return NULL;
+    bool NBTTagShort::hasNoTags() {
+        return NBTBase::hasNoTags();
     }
 
-    uint8_t NBTTagInt::getId() {
-        return NULL;
+    bool NBTTagShort::equals(NBTBase *tag) {
+        if (NBTBase::equals(tag)) {
+            return this->data == ((NBTTagShort *) tag)->data;
+        } else {
+            return false;
+        }
+    }
+
+    string NBTTagShort::getString() {
+        return NBTBase::getString();
+    }
+
+    string NBTTagInt::toString() {
+        return nullptr;
+    }
+
+    TAG_TYPE NBTTagInt::getType() {
+        return INT;
     }
 
     NBTBase *NBTTagInt::copy() {
-        return NULL;
+        return nullptr;
     }
 
     void NBTTagInt::write(uint8_t *data) {
@@ -82,16 +98,28 @@ namespace libnbt {
 
     }
 
-    string NBTTagLong::toString() {
-        return NULL;
+    bool NBTTagInt::hasNoTags() {
+        return NBTBase::hasNoTags();
     }
 
-    uint8_t NBTTagLong::getId() {
-        return NULL;
+    bool NBTTagInt::equals(NBTBase *tag) {
+        return NBTBase::equals(tag);
+    }
+
+    string NBTTagInt::getString() {
+        return NBTBase::getString();
+    }
+
+    string NBTTagLong::toString() {
+        return nullptr;
+    }
+
+    TAG_TYPE NBTTagLong::getType() {
+        return LONG;
     }
 
     NBTBase *NBTTagLong::copy() {
-        return NULL;
+        return nullptr;
     }
 
     void NBTTagLong::write(uint8_t *data) {
@@ -102,16 +130,28 @@ namespace libnbt {
 
     }
 
-    string NBTTagFloat::toString() {
-        return NULL;
+    bool NBTTagLong::hasNoTags() {
+        return NBTBase::hasNoTags();
     }
 
-    uint8_t NBTTagFloat::getId() {
-        return NULL;
+    bool NBTTagLong::equals(NBTBase *tag) {
+        return NBTBase::equals(tag);
+    }
+
+    string NBTTagLong::getString() {
+        return NBTBase::getString();
+    }
+
+    string NBTTagFloat::toString() {
+        return nullptr;
+    }
+
+    TAG_TYPE NBTTagFloat::getType() {
+        return FLOAT;
     }
 
     NBTBase *NBTTagFloat::copy() {
-        return NULL;
+        return nullptr;
     }
 
     void NBTTagFloat::write(uint8_t *data) {
@@ -122,16 +162,28 @@ namespace libnbt {
 
     }
 
-    string NBTTagDouble::toString() {
-        return NULL;
+    bool NBTTagFloat::hasNoTags() {
+        return NBTBase::hasNoTags();
     }
 
-    uint8_t NBTTagDouble::getId() {
-        return NULL;
+    bool NBTTagFloat::equals(NBTBase *tag) {
+        return NBTBase::equals(tag);
+    }
+
+    string NBTTagFloat::getString() {
+        return NBTBase::getString();
+    }
+
+    string NBTTagDouble::toString() {
+        return nullptr;
+    }
+
+    TAG_TYPE NBTTagDouble::getType() {
+        return DOUBLE;
     }
 
     NBTBase *NBTTagDouble::copy() {
-        return NULL;
+        return nullptr;
     }
 
     void NBTTagDouble::write(uint8_t *data) {
@@ -142,16 +194,28 @@ namespace libnbt {
 
     }
 
-    string NBTTagByteArray::toString() {
-        return NULL;
+    bool NBTTagDouble::hasNoTags() {
+        return NBTBase::hasNoTags();
     }
 
-    uint8_t NBTTagByteArray::getId() {
-        return NULL;
+    bool NBTTagDouble::equals(NBTBase *tag) {
+        return NBTBase::equals(tag);
+    }
+
+    string NBTTagDouble::getString() {
+        return NBTBase::getString();
+    }
+
+    string NBTTagByteArray::toString() {
+        return nullptr;
+    }
+
+    TAG_TYPE NBTTagByteArray::getType() {
+        return BYTE_ARRAY;
     }
 
     NBTBase *NBTTagByteArray::copy() {
-        return NULL;
+        return nullptr;
     }
 
     void NBTTagByteArray::write(uint8_t *data) {
@@ -162,16 +226,28 @@ namespace libnbt {
 
     }
 
-    string NBTTagString::toString() {
-        return NULL;
+    bool NBTTagByteArray::hasNoTags() {
+        return NBTBase::hasNoTags();
     }
 
-    uint8_t NBTTagString::getId() {
-        return NULL;
+    bool NBTTagByteArray::equals(NBTBase *tag) {
+        return NBTBase::equals(tag);
+    }
+
+    string NBTTagByteArray::getString() {
+        return NBTBase::getString();
+    }
+
+    string NBTTagString::toString() {
+        return nullptr;
+    }
+
+    TAG_TYPE NBTTagString::getType() {
+        return STRING;
     }
 
     NBTBase *NBTTagString::copy() {
-        return NULL;
+        return nullptr;
     }
 
     void NBTTagString::write(uint8_t *data) {
@@ -182,16 +258,28 @@ namespace libnbt {
 
     }
 
-    string NBTTagList::toString() {
-        return NULL;
+    bool NBTTagString::hasNoTags() {
+        return NBTBase::hasNoTags();
     }
 
-    uint8_t NBTTagList::getId() {
-        return NULL;
+    bool NBTTagString::equals(NBTBase *tag) {
+        return NBTBase::equals(tag);
+    }
+
+    string NBTTagString::getString() {
+        return NBTBase::getString();
+    }
+
+    string NBTTagList::toString() {
+        return nullptr;
+    }
+
+    TAG_TYPE NBTTagList::getType() {
+        return LIST;
     }
 
     NBTBase *NBTTagList::copy() {
-        return NULL;
+        return nullptr;
     }
 
     void NBTTagList::write(uint8_t *data) {
@@ -202,16 +290,28 @@ namespace libnbt {
 
     }
 
-    string NBTTagCompound::toString() {
-        return NULL;
+    bool NBTTagList::hasNoTags() {
+        return NBTBase::hasNoTags();
     }
 
-    uint8_t NBTTagCompound::getId() {
-        return 10;
+    bool NBTTagList::equals(NBTBase *tag) {
+        return NBTBase::equals(tag);
+    }
+
+    string NBTTagList::getString() {
+        return NBTBase::getString();
+    }
+
+    string NBTTagCompound::toString() {
+        return nullptr;
+    }
+
+    TAG_TYPE NBTTagCompound::getType() {
+        return COMPOUND;
     }
 
     NBTBase *NBTTagCompound::copy() {
-        return NULL;
+        return nullptr;
     }
 
     void NBTTagCompound::write(uint8_t *data) {
@@ -230,16 +330,94 @@ namespace libnbt {
         this->tagMap.insert({key, value});
     }
 
-    string NBTTagIntArray::toString() {
-        return NULL;
+    bool NBTTagCompound::hasNoTags() {
+        return NBTBase::hasNoTags();
     }
 
-    uint8_t NBTTagIntArray::getId() {
-        return NULL;
+    bool NBTTagCompound::equals(NBTBase *tag) {
+        return NBTBase::equals(tag);
+    }
+
+    string NBTTagCompound::getString() {
+        return NBTBase::getString();
+    }
+
+    NBTBase *NBTTagCompound::getTag(string key) {
+        if (hasKey(key)) {
+            return tagMap.at(key);
+        }
+        return nullptr;
+    }
+
+    TAG_TYPE NBTTagCompound::getTagId(string key) {
+        if (hasKey(key)) {
+            return tagMap.at(key)->getType();
+        }
+        return END;
+    }
+
+    bool NBTTagCompound::hasKey(string key) {
+        return tagMap.find(key) == tagMap.end();
+    }
+
+    bool NBTTagCompound::hasKey(string key, uint8_t type) {
+        return hasKey(key) && tagMap.at(key)->getType() == type;
+    }
+
+    void NBTTagCompound::setByte(string key, uint8_t value) {
+        if (hasKey(key, 1)) {
+            ((NBTTagByte *) tagMap.at(key))->setByte(value);
+        } else {
+            tagMap.insert({key, new NBTTagByte(value)});
+        }
+    }
+
+    void NBTTagCompound::setShort(string key, int16_t value) {
+
+    }
+
+    void NBTTagCompound::setInteger(string key, int32_t value) {
+
+    }
+
+    void NBTTagCompound::setLong(string key, int64_t value) {
+
+    }
+
+    void NBTTagCompound::setFloat(string key, float value) {
+
+    }
+
+    void NBTTagCompound::setDouble(string key, double value) {
+
+    }
+
+    void NBTTagCompound::setString(string key, string value) {
+
+    }
+
+    void NBTTagCompound::setByteArray(string key, vector<string> *value) {
+
+    }
+
+    void NBTTagCompound::setIntArray(string key, vector<int> *value) {
+
+    }
+
+    void NBTTagCompound::setBoolean(string key, bool value) {
+
+    }
+
+    string NBTTagIntArray::toString() {
+        return nullptr;
+    }
+
+    TAG_TYPE NBTTagIntArray::getType() {
+        return INT_ARRAY;
     }
 
     NBTBase *NBTTagIntArray::copy() {
-        return NULL;
+        return nullptr;
     }
 
     void NBTTagIntArray::write(uint8_t *data) {
@@ -250,12 +428,24 @@ namespace libnbt {
 
     }
 
+    bool NBTTagIntArray::hasNoTags() {
+        return NBTBase::hasNoTags();
+    }
+
+    bool NBTTagIntArray::equals(NBTBase *tag) {
+        return NBTBase::equals(tag);
+    }
+
+    string NBTTagIntArray::getString() {
+        return NBTBase::getString();
+    }
+
     string NBTTagEnd::toString() {
         return "END";
     }
 
-    uint8_t NBTTagEnd::getId() {
-        return 0;
+    TAG_TYPE NBTTagEnd::getType() {
+        return END;
     }
 
     NBTBase *NBTTagEnd::copy() {
@@ -270,12 +460,24 @@ namespace libnbt {
 
     }
 
+    bool NBTTagEnd::hasNoTags() {
+        return NBTBase::hasNoTags();
+    }
+
+    bool NBTTagEnd::equals(NBTBase *tag) {
+        return NBTBase::equals(tag);
+    }
+
+    string NBTTagEnd::getString() {
+        return NBTBase::getString();
+    }
+
     string NBTTagByte::toString() {
         return to_string(this->data) + "b";
     }
 
-    uint8_t NBTTagByte::getId() {
-        return 1;
+    TAG_TYPE NBTTagByte::getType() {
+        return BYTE;
     }
 
     NBTBase *NBTTagByte::copy() {
@@ -296,5 +498,13 @@ namespace libnbt {
         } else {
             return false;
         }
+    }
+
+    bool NBTTagByte::hasNoTags() {
+        return NBTBase::hasNoTags();
+    }
+
+    string NBTTagByte::getString() {
+        return NBTBase::getString();
     }
 }

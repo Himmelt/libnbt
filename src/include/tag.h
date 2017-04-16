@@ -8,13 +8,14 @@
 #include <string>
 #include <vector>
 #include <typeinfo>
-#include <map>
+#include <unordered_map>
 
 namespace libnbt {
 
     using namespace std;
+    using namespace __gnu_cxx;
 
-    enum NBT_TYPES {
+    enum TAG_TYPE {
         END, BYTE, SHORT, INT, LONG, FLOAT, DOUBLE,
         BYTE_ARRAY, STRING, LIST, COMPOUND, INT_ARRAY
     };
@@ -28,27 +29,34 @@ namespace libnbt {
     public:
         virtual string toString()=0;
 
-        virtual uint8_t getId()=0;
+        virtual TAG_TYPE getType()=0;
 
         virtual NBTBase *copy()=0;
 
-        bool hasNoTags() { return false; }
+        virtual bool hasNoTags() { return false; }
 
         virtual bool equals(NBTBase *tag);
 
     protected:
         static NBTBase *createNewByType(uint8_t id);
 
-        string getString() { return this->toString(); }
+        virtual string getString() { return this->toString(); }
     };
 
     class NBTTagEnd : public NBTBase {
     public:
         string toString() override;
 
-        uint8_t getId() override;
+        TAG_TYPE getType() override;
 
         NBTBase *copy() override;
+
+        bool hasNoTags() override;
+
+        bool equals(NBTBase *tag) override;
+
+    protected:
+        string getString() override;
 
     private:
         void write(uint8_t *data) override;
@@ -59,17 +67,24 @@ namespace libnbt {
 
     class NBTTagByte : public NBTBase {
     public:
-        string toString() override;
-
-        uint8_t getId() override;
-
-        NBTBase *copy() override;
-
         NBTTagByte() {}
 
         NBTTagByte(uint8_t data) { this->data = data; }
 
+        void setByte(uint8_t data) { this->data = data; }
+
+        string toString() override;
+
+        TAG_TYPE getType() override;
+
+        NBTBase *copy() override;
+
         bool equals(NBTBase *tag) override;
+
+        bool hasNoTags() override;
+
+    protected:
+        string getString() override;
 
     private:
         uint8_t data;
@@ -82,13 +97,26 @@ namespace libnbt {
 
     class NBTTagShort : public NBTBase {
     public:
+        NBTTagShort() {}
+
+        NBTTagShort(int16_t data) { this->data = data; }
+
         string toString() override;
 
-        uint8_t getId() override;
+        TAG_TYPE getType() override;
 
         NBTBase *copy() override;
 
+        bool hasNoTags() override;
+
+        bool equals(NBTBase *tag) override;
+
+    protected:
+        string getString() override;
+
     private:
+        int16_t data;
+
         void write(uint8_t *data) override;
 
         void read(uint8_t *data, int depth) override;
@@ -99,9 +127,16 @@ namespace libnbt {
     public:
         string toString() override;
 
-        uint8_t getId() override;
+        TAG_TYPE getType() override;
 
         NBTBase *copy() override;
+
+        bool hasNoTags() override;
+
+        bool equals(NBTBase *tag) override;
+
+    protected:
+        string getString() override;
 
     private:
         void write(uint8_t *data) override;
@@ -114,9 +149,16 @@ namespace libnbt {
     public:
         string toString() override;
 
-        uint8_t getId() override;
+        TAG_TYPE getType() override;
 
         NBTBase *copy() override;
+
+        bool hasNoTags() override;
+
+        bool equals(NBTBase *tag) override;
+
+    protected:
+        string getString() override;
 
     private:
         void write(uint8_t *data) override;
@@ -129,9 +171,16 @@ namespace libnbt {
     public:
         string toString() override;
 
-        uint8_t getId() override;
+        TAG_TYPE getType() override;
 
         NBTBase *copy() override;
+
+        bool hasNoTags() override;
+
+        bool equals(NBTBase *tag) override;
+
+    protected:
+        string getString() override;
 
     private:
         void write(uint8_t *data) override;
@@ -144,9 +193,16 @@ namespace libnbt {
     public:
         string toString() override;
 
-        uint8_t getId() override;
+        TAG_TYPE getType() override;
 
         NBTBase *copy() override;
+
+        bool hasNoTags() override;
+
+        bool equals(NBTBase *tag) override;
+
+    protected:
+        string getString() override;
 
     private:
         void write(uint8_t *data) override;
@@ -159,9 +215,16 @@ namespace libnbt {
     public:
         string toString() override;
 
-        uint8_t getId() override;
+        TAG_TYPE getType() override;
 
         NBTBase *copy() override;
+
+        bool hasNoTags() override;
+
+        bool equals(NBTBase *tag) override;
+
+    protected:
+        string getString() override;
 
     private:
         void write(uint8_t *data) override;
@@ -174,9 +237,16 @@ namespace libnbt {
     public:
         string toString() override;
 
-        uint8_t getId() override;
+        TAG_TYPE getType() override;
 
         NBTBase *copy() override;
+
+        bool hasNoTags() override;
+
+        bool equals(NBTBase *tag) override;
+
+    protected:
+        string getString() override;
 
     private:
         void write(uint8_t *data) override;
@@ -189,9 +259,16 @@ namespace libnbt {
     public:
         string toString() override;
 
-        uint8_t getId() override;
+        TAG_TYPE getType() override;
 
         NBTBase *copy() override;
+
+        bool hasNoTags() override;
+
+        bool equals(NBTBase *tag) override;
+
+    protected:
+        string getString() override;
 
     private:
         void write(uint8_t *data) override;
@@ -202,9 +279,11 @@ namespace libnbt {
 
     class NBTTagCompound : public NBTBase {
     public:
+        NBTTagCompound() {}
+
         string toString() override;
 
-        uint8_t getId() override;
+        TAG_TYPE getType() override;
 
         NBTBase *copy() override;
 
@@ -212,8 +291,43 @@ namespace libnbt {
 
         void setTag(string key, NBTBase *value);
 
+        NBTBase *getTag(string key);
+
+        TAG_TYPE getTagId(string key);
+
+        bool hasKey(string key);
+
+        bool hasKey(string key, uint8_t type);
+
+        void setByte(string key, uint8_t value);
+
+        void setShort(string key, int16_t value);
+
+        void setInteger(string key, int32_t value);
+
+        void setLong(string key, int64_t value);
+
+        void setFloat(string key, float value);
+
+        void setDouble(string key, double value);
+
+        void setString(string key, string value);
+
+        void setByteArray(string key, vector<string> *value);
+
+        void setIntArray(string key, vector<int> *value);
+
+        void setBoolean(string key, bool value);
+
+        bool hasNoTags() override;
+
+        bool equals(NBTBase *tag) override;
+
+    protected:
+        string getString() override;
+
     private:
-        map<string, NBTBase *> tagMap;
+        unordered_map<string, NBTBase *> tagMap;
 
         void write(uint8_t *data) override;
 
@@ -225,9 +339,16 @@ namespace libnbt {
     public:
         string toString() override;
 
-        uint8_t getId() override;
+        TAG_TYPE getType() override;
 
         NBTBase *copy() override;
+
+        bool hasNoTags() override;
+
+        bool equals(NBTBase *tag) override;
+
+    protected:
+        string getString() override;
 
     private:
         void write(uint8_t *data) override;
