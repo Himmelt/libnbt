@@ -508,4 +508,8 @@ namespace libnbt {
         return NBTBase::getString();
     }
 
+    void NBTTagByte::write2(ostream stream) {
+        stream << data;
+    }
+
 }

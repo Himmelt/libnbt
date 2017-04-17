@@ -26,6 +26,9 @@ namespace libnbt {
 
         virtual void read(uint8_t *data, int depth)=0;
 
+        virtual void write2(ostream stream)=0;
+
+
     public:
         virtual string toString()=0;
 
@@ -121,6 +124,8 @@ namespace libnbt {
         void write(uint8_t *data) override;
 
         void read(uint8_t *data, int depth) override;
+
+        void write2(ostream stream) override;
 
     };
 
