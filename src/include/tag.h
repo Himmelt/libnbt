@@ -65,6 +65,35 @@ namespace libnbt {
 
     };
 
+    template<class T>
+    class NBTTagData : public NBTBase {
+    public:
+        NBTTagData() {}
+
+        NBTTagData(T data) {
+            this->data = data;
+        }
+
+        void setData(T data) {
+            this->data = data;
+        }
+
+        T getData() {
+            return data;
+        }
+
+    private:
+        T data;
+    };
+
+    class NBTTagByte2 : public NBTTagData<uint8_t> {
+    public:
+        TAG_TYPE getType() override {
+            return BYTE;
+        }
+
+    };
+
     class NBTTagByte : public NBTBase {
     public:
         NBTTagByte() {}

@@ -507,4 +507,5 @@ namespace libnbt {
     string NBTTagByte::getString() {
         return NBTBase::getString();
     }
+
 }
