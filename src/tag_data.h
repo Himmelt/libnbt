@@ -12,43 +12,55 @@ namespace libnbt {
 
         uint8_t width;
 
-        void read(std::istream in) override {
-        }
-
-        void write(std::ostream out) override {}
-
     public:
         NBTTagData(T data) {
-            this->data = data;
+            setData(data);
         }
 
         void setData(T data) {
             this->data = data;
+            std::cout << "TYPE:" << typeid(T).name() << "|-|" << typeid(int8_t).name() << std::endl;
             if (typeid(T) == typeid(int8_t)) {
                 type = BYTE;
-            }
-            if (typeid(T) == typeid(int16_t)) {
+                width = 1;
+            } else if (typeid(T) == typeid(int16_t)) {
                 type = SHORT;
-            }
-            if (typeid(T) == typeid(int32_t)) {
+                width = 2;
+            } else if (typeid(T) == typeid(int32_t)) {
                 type = INT;
-            }
-            if (typeid(T) == typeid(int64_t)) {
+                width = 4;
+            } else if (typeid(T) == typeid(int64_t)) {
                 type = LONG;
-            }
-            if (typeid(T) == typeid(float)) {
+                width = 8;
+            } else if (typeid(T) == typeid(float)) {
                 type = FLOAT;
-            }
-            if (typeid(T) == typeid(double)) {
+                width = 4;
+            } else if (typeid(T) == typeid(double)) {
                 type = DOUBLE;
-            }
-            if (typeid(T) == typeid(std::string)) {
+                width = 8;
+            } else if (typeid(T) == typeid(std::string)) {
                 type = STRING;
+                width = 0;
+            } else {
+                type = END;
+                width = 0;
             }
+            std::cout << type << "|" << (unsigned short) width << std::endl;
         }
 
         T getData() {
             return data;
+        }
+
+        void read(std::istream &in) override {
+            in.read((char *) &data, width);
+        }
+
+        void write(std::ostream &out) override {
+            std::cout << "width:" << (unsigned short) width << std::endl;
+            char *p = (char *) &data;
+            std::cout << (unsigned short) p[0] << "-" << (unsigned short) p[1] << std::endl;
+            out.write((char *) &data, width);
         }
     };
 }

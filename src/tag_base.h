@@ -15,9 +15,7 @@ namespace libnbt {
 
     class NBTBase {
     private:
-        virtual void read(std::istream in) = 0;
 
-        virtual void write(std::ostream out) = 0;
 
     protected:
         TAG_TYPE type;
@@ -25,6 +23,9 @@ namespace libnbt {
         static NBTBase *createNewByType(TAG_TYPE type);
 
     public:
+        virtual void read(std::istream &in) = 0;
+
+        virtual void write(std::ostream &out) = 0;
 
         TAG_TYPE getType() { return type; };
 
