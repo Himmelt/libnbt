@@ -23,12 +23,53 @@ namespace libnbt {
             }
         }
 
-        void read(std::istream &in) override {
+        void put(T data) {
+            array.push_back(data);
+        }
 
+        void set(size_t index, T data) {
+            if (index < array.size()) array[index] = data;
+        }
+
+        size_t size() {
+            return array.size();
+        }
+
+        T get(size_t index) {
+            return array[index];
+        }
+
+        std::vector<T> get() {
+            return array;
+        }
+
+        bool remove(size_t index) {
+            if (index < array.size()) {
+                array.erase(array.begin() + index);
+                return true;
+            }
+            return false;
+        }
+
+        void read(std::istream &in) override {
+            int32_t length = 0;
+            int8_t width = sizeof(T);
+            in.read((char *) &length, 4);
+            array.clear();
+            for (int i = 0; i < length; i++) {
+                T temp;
+                in.read((char *) &temp, width);
+                array.push_back(temp);
+            }
         }
 
         void write(std::ostream &out) override {
-
+            int32_t length = (int32_t) array.size();
+            out.write(((char *) &length), 4);
+            for (int i = 0; i < length; i++) {
+                T temp = array[i];
+                out.write((char *) &temp, sizeof(T));
+            }
         }
 
         bool equals(NBTBase &tag) override {
@@ -51,11 +92,9 @@ namespace libnbt {
         TAG_TYPE getListType() { return child; }
 
         void read(std::istream &in) override {
-            NBTTagVector::read(in);
         }
 
         void write(std::ostream &out) override {
-            NBTTagVector::write(out);
         }
 
     };

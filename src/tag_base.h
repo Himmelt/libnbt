@@ -38,7 +38,6 @@ namespace libnbt {
         void read(std::istream &in) override {}
 
         void write(std::ostream &out) override {}
-
     };
 
 }
