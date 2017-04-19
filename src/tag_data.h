@@ -9,7 +9,7 @@ namespace libnbt {
 
     template<class T>
     class NBTTagData : public NBTBase {
-    private:
+    protected:
         T data;
 
     public:
@@ -70,13 +70,19 @@ namespace libnbt {
         NBTTagString(const std::string &data) : NBTTagData(data) {}
 
         void read(std::istream &in) override {
-            NBTTagData::read(in);
+            int16_t length = 0;
+            in.read(((char *) &length), 2);
+            char *temp = new char[length + 1];
+            in.read(temp, length);
+            data.assign(temp, (size_t) length);
+            delete (temp);
         }
 
         void write(std::ostream &out) override {
-            NBTTagData::write(out);
+            int16_t length = (int16_t) data.size();
+            out.write(((char *) &length), 2);
+            out.write(data.c_str(), length);
         }
-
     };
 }
 
