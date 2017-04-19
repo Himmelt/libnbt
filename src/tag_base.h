@@ -8,36 +8,38 @@
 #include <string>
 #include <vector>
 #include <typeinfo>
-#include <unordered_map>
-#include "tag_type.h"
 
 namespace libnbt {
+    enum TAG_TYPE {
+        END, BYTE, SHORT, INT, LONG, FLOAT, DOUBLE,
+        BYTE_ARRAY, STRING, LIST, COMPOUND, INT_ARRAY
+    };
 
     class NBTBase {
-    private:
-
-
     protected:
-        TAG_TYPE type;
-
-        static NBTBase *createNewByType(TAG_TYPE type);
-
+        TAG_TYPE type = END;
     public:
-        virtual void read(std::istream &in) = 0;
+        virtual void read(std::istream &in)=0;
 
-        virtual void write(std::ostream &out) = 0;
+        virtual void write(std::ostream &out)=0;
 
-        TAG_TYPE getType() { return type; };
+        virtual TAG_TYPE getType() { return type; }
 
-        virtual bool equals(NBTBase *tag) {
-            if (typeid(tag) != typeid(this)) {
-                return false;
-            } else {
-                return this->type == tag->type;
+        virtual bool equals(NBTBase &tag) {
+            if (typeid(tag) == typeid(this)) {
+                return this->type == tag.type;
             }
+            return false;
         }
     };
 
+    class NBTTagEnd : public NBTBase {
+    public:
+        void read(std::istream &in) override {}
+
+        void write(std::ostream &out) override {}
+
+    };
 
 }
 
