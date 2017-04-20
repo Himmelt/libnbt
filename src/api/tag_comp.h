@@ -15,6 +15,8 @@ namespace libnbt {
 
     public:
 
+        NBTTagCompound() {}
+
         bool hasTag(const std::string key);
 
         void setTag(std::string key, NBTBase *tag);
