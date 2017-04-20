@@ -1,5 +1,5 @@
-#ifndef LIBNBT_TAG_H
-#define LIBNBT_TAG_H
+#ifndef LIBNBT_TAG_BASE_H
+#define LIBNBT_TAG_BASE_H
 
 #pragma once
 
@@ -8,6 +8,9 @@
 #include <string>
 #include <vector>
 #include <typeinfo>
+#include "tag_data.h"
+#include "tag_vector.h"
+#include "tag_comp.h"
 
 namespace libnbt {
     enum TAG_TYPE {
@@ -31,6 +34,37 @@ namespace libnbt {
             }
             return false;
         }
+
+        static NBTBase *createNewTag(TAG_TYPE type) {
+            switch (type) {
+                case END:
+                    return new NBTTagEnd();
+                case BYTE:
+                    return new NBTTagByte();
+                case SHORT:
+                    return new NBTTagShort();
+                case INT:
+                    return new NBTTagInt();
+                case LONG:
+                    return new NBTTagLong();
+                case FLOAT:
+                    return new NBTTagFloat();
+                case DOUBLE:
+                    return new NBTTagDouble();
+                case BYTE_ARRAY:
+                    return new NBTTagByteArray();
+                case STRING:
+                    return new NBTTagString();
+                case LIST:
+                    return new NBTTagList();
+                case COMPOUND:
+                    return new NBTTagCompound();
+                case INT_ARRAY:
+                    return new NBTTagIntArray();
+                default:
+                    return new NBTTagEnd();
+            }
+        }
     };
 
     class NBTTagEnd : public NBTBase {
@@ -42,4 +76,4 @@ namespace libnbt {
 
 }
 
-#endif //LIBNBT_TAG_H
+#endif //LIBNBT_TAG_BASE_H

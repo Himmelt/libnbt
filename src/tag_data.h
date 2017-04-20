@@ -13,6 +13,8 @@ namespace libnbt {
         T data;
 
     public:
+        NBTTagData() {}
+
         NBTTagData(T data) {
             setData(data);
         }
@@ -67,6 +69,8 @@ namespace libnbt {
 
     class NBTTagString : public NBTTagData<std::string> {
     public:
+        NBTTagString() {}
+
         NBTTagString(const std::string &data) : NBTTagData(data) {}
 
         void read(std::istream &in) override {
