@@ -25,6 +25,8 @@ namespace libnbt {
 
         void write(std::ostream &out) override;
 
+        void clear();
+
     };
 }
 

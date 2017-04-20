@@ -26,8 +26,10 @@ namespace libnbt {
             array.push_back(data);
         }
 
-        void set(size_t index, T data) {
-            if (index < array.size()) array[index] = data;
+        virtual void set(size_t index, T data) {
+            if (index < array.size()) {
+                array[index] = data;
+            }
         }
 
         size_t size() {
@@ -42,7 +44,7 @@ namespace libnbt {
             return array;
         }
 
-        bool remove(size_t index) {
+        virtual bool remove(size_t index) {
             if (index < array.size()) {
                 array.erase(array.begin() + index);
                 return true;
@@ -50,11 +52,15 @@ namespace libnbt {
             return false;
         }
 
-        void read(std::istream &in) override {
+        virtual void clear() {
+            array.clear();
+        }
+
+        virtual void read(std::istream &in) override {
             int32_t size = 0;
             int8_t width = sizeof(T);
             in.read((char *) &size, 4);
-            array.clear();
+            clear();
             for (int i = 0; i < size; i++) {
                 T temp;
                 in.read((char *) &temp, width);
@@ -62,7 +68,7 @@ namespace libnbt {
             }
         }
 
-        void write(std::ostream &out) override {
+        virtual void write(std::ostream &out) override {
             int32_t size = (int32_t) array.size();
             int8_t width = sizeof(T);
             out.write((char *) &size, 4);
@@ -94,6 +100,12 @@ namespace libnbt {
         void read(std::istream &in) override;
 
         void write(std::ostream &out) override;
+
+        void clear() override;
+
+        bool remove(size_t index) override;
+
+        void set(size_t index, NBTBase *data) override;
     };
 }
 

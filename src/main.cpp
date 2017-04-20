@@ -9,17 +9,12 @@ using namespace libnbt;
 int main() {
 
     ofstream file("out.dat", ios::binary);
-    NBTTagString tagString("Himmelt");
-    tagString.write(file);
-    NBTTagIntArray array;
-    array.put('a');
-    array.put('b');
-    array.put('c');
-    array.put('d');
-    array.put(255);
-    array.set(4, 0xfafa);
-    array.set(2, 0);
-    cout << array.get(0) << endl;
-    array.write(file);
+    NBTTagList list(BYTE);
+    list.put(new NBTTagByte(64));
+    list.put(new NBTTagByte(65));
+    list.put(new NBTTagByte(66));
+    list.remove(1);
+    list.set(1, new NBTTagByte(78));
+    list.write(file);
     return 0;
 }

@@ -26,4 +26,12 @@ namespace libnbt {
 
     }
 
+    void NBTTagCompound::clear() {
+        std::unordered_map<std::string, NBTBase *>::iterator i = map.begin();
+        for (; i != map.end(); i++) {
+            delete (i->second);
+        }
+        map.clear();
+    }
+
 }
