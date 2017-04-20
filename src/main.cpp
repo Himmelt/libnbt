@@ -1,5 +1,7 @@
 #include <iostream>
-#include "tag_base.h"
+#include "api/tag_base.h"
+#include "api/tag_data.h"
+#include "api/tag_vector.h"
 
 using namespace std;
 using namespace libnbt;

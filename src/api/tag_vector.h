@@ -11,7 +11,6 @@ namespace libnbt {
     class NBTTagVector : public NBTBase {
     protected:
         std::vector<T> array;
-
     public:
         NBTTagVector() {
             if (typeid(T) == typeid(int8_t)) {
@@ -84,35 +83,17 @@ namespace libnbt {
 
     class NBTTagList : public NBTTagVector<NBTBase *> {
     private:
-        char child;
+        char child = 0;
     public:
         NBTTagList() {}
 
-        NBTTagList(TAG_TYPE child) : NBTTagVector() {
-            this->child = child;
-        }
+        NBTTagList(TAG_TYPE child);
 
-        TAG_TYPE getListType() { return (TAG_TYPE) child; }
+        TAG_TYPE getListType();
 
-        void read(std::istream &in) override {
-            in.get(child);
-            int32_t size = 0;
-            in.read((char *) &size, 4);
-            for (int i = 0; i < size; i++) {
-                NBTBase *tag = createNewTag(child);
-                tag->read(in);
-                array.push_back(tag);
-            }
-        }
+        void read(std::istream &in) override;
 
-        void write(std::ostream &out) override {
-            int32_t size = (int32_t) array.size();
-            out.put(child);
-            out.write((char *) &size, 4);
-            for (int i = 0; i < size; i++) {
-                array[i]->write(out);
-            }
-        }
+        void write(std::ostream &out) override;
     };
 }
 
