@@ -47,4 +47,11 @@ namespace libnbt {
         }
     }
 
+    bool NBTBase::BigEndian = isBigEndian();
+
+    bool NBTBase::isBigEndian() {
+        int32_t num = 0x12345678;
+        return ((int8_t *) &num)[0] == 0x12;
+    }
+
 }

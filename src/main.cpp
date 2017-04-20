@@ -7,8 +7,11 @@ using namespace libnbt;
 
 int main() {
 
+    cout << "main" << endl;
+
     ofstream file("out.dat", ios::binary);
     NBTTagCompound compound;
     compound.hasTag("test");
+    cout << NBTBase::isBigEndian() << endl;
     return 0;
 }

@@ -16,9 +16,11 @@ namespace libnbt {
     };
 
     class NBTBase {
-    protected:
-        char type = 0;
     public:
+        char type = 0;
+
+        static bool BigEndian;
+
         virtual void read(std::istream &in)=0;
 
         virtual void write(std::ostream &out)=0;
@@ -28,6 +30,9 @@ namespace libnbt {
         virtual bool equals(NBTBase &tag);
 
         static NBTBase *createNewTag(TAG_TYPE type);
+
+        static bool isBigEndian();
+
     };
 
     class NBTTagEnd : public NBTBase {
