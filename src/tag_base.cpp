@@ -6,7 +6,7 @@
 namespace libnbt {
 
     TAG_TYPE NBTBase::getType() {
-        return type;
+        return (TAG_TYPE) type;
     }
 
     bool NBTBase::equals(NBTBase &tag) {

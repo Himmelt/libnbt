@@ -12,10 +12,12 @@ namespace libnbt {
     class NBTTagCompound : public NBTBase {
     private:
         std::unordered_map<std::string, NBTBase *> map;
-
+        std::string root = "";
     public:
 
-        NBTTagCompound() {}
+        NBTTagCompound();
+
+        NBTTagCompound(std::string root);
 
         bool hasTag(const std::string key);
 
@@ -28,6 +30,8 @@ namespace libnbt {
         void write(std::ostream &out) override;
 
         void clear();
+
+        bool check();
 
     };
 }

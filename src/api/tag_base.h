@@ -17,7 +17,7 @@ namespace libnbt {
 
     class NBTBase {
     protected:
-        TAG_TYPE type = END;
+        char type = 0;
     public:
         virtual void read(std::istream &in)=0;
 
