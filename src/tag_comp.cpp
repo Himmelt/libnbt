@@ -60,12 +60,20 @@ namespace libnbt {
         this->type = COMPOUND;
     }
 
-    NBTTagCompound::NBTTagCompound(std::string root) {
-        this->root = root;
+    NBTTagCompound::NBTTagCompound(std::string rootKey) {
+        this->rootKey = rootKey;
     }
 
     bool NBTTagCompound::check() {
         return true;
+    }
+
+    void NBTTagCompound::setRoot(std::string rootKey) {
+        this->rootKey = rootKey;
+    }
+
+    std::string NBTTagCompound::getRoot() {
+        return rootKey;
     }
 
 }

@@ -38,6 +38,11 @@ namespace libnbt {
         static void write(std::ostream &out, const char *data, uint8_t width);
 
         static std::string readString(std::istream &in, int16_t length);
+
+        static bool readNbt(std::istream &in, NBTBase *tag);
+
+        static bool writeNbt(std::ostream &out, NBTBase *tag);
+
     };
 
     class NBTTagEnd : public NBTBase {
