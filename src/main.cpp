@@ -12,6 +12,6 @@ int main() {
     ofstream file("out.dat", ios::binary);
     NBTTagCompound compound;
     compound.hasTag("test");
-    cout << NBTBase::isBigEndian() << endl;
+    cout << NBTBase::isLittleEndian() << endl;
     return 0;
 }

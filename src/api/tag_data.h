@@ -45,34 +45,11 @@ namespace libnbt {
         }
 
         void read(std::istream &in) override {
-            in.read((char *) &data, sizeof(T));
-            if (width == 1) {
-                in.get(data);
-            } else if (BigEndian) {
-                in.read((char *) &data, width);
-            } else {
-                char *temp = new char[width];
-                for (int i = width - 1; i >= 0; i--) {
-                    in.get(temp[i]);
-                }
-                memcpy(&data, temp, width);
-                delete[](temp);
-            }
+            NBTBase::read(in, (char *) &data, width);
         }
 
         void write(std::ostream &out) override {
-            if (width == 1) {
-                out.put((char) data);
-            } else if (BigEndian) {
-                out.write((char *) &data, width);
-            } else {
-                char *temp = new char[width];
-                memcpy(temp, &data, width);
-                for (int i = width - 1; i >= 0; i--) {
-                    out.put(temp[i]);
-                }
-                delete[](temp);
-            }
+            NBTBase::write(out, (char *) &data, width);
         }
 
         bool equals(NBTBase &tag) override {

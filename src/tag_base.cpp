@@ -47,11 +47,54 @@ namespace libnbt {
         }
     }
 
-    bool NBTBase::BigEndian = isBigEndian();
+    bool NBTBase::endian = isLittleEndian();
 
-    bool NBTBase::isBigEndian() {
+    bool NBTBase::isLittleEndian() {
         int32_t num = 0x12345678;
-        return ((int8_t *) &num)[0] == 0x12;
+        return ((int8_t *) &num)[0] == 0x78;
+    }
+
+    void NBTBase::read(std::istream &in, char *data, uint8_t width) {
+        if (width > 1 && endian) {
+            char t, *temp = new char[width];
+            in.read(temp, width);
+            for (int i = 0; i < width / 2; i++) {
+                t = temp[i];
+                temp[i] = temp[width - i - 1];
+                temp[width - i - 1] = t;
+            }
+            memcpy(data, temp, width);
+            delete[](temp);
+        } else {
+            in.read(data, width);
+        }
+    }
+
+    void NBTBase::write(std::ostream &out, const char *data, uint8_t width) {
+        if (width > 1 && endian) {
+            char t, *temp = new char[width];
+            memcpy(temp, data, width);
+            for (int i = 0; i < width / 2; i++) {
+                t = temp[i];
+                temp[i] = temp[width - i - 1];
+                temp[width - i - 1] = t;
+            }
+            out.write(temp, width);
+            delete[](temp);
+        } else {
+            out.write(data, width);
+        }
+    }
+
+    std::string NBTBase::readString(std::istream &in, int16_t length) {
+        std::string temp = "";
+        temp.clear();
+        char s;
+        while (length--) {
+            in.get(s);
+            temp.push_back(s);
+        }
+        return temp;
     }
 
 }

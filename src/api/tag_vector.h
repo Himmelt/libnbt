@@ -11,6 +11,7 @@ namespace libnbt {
     class NBTTagVector : public NBTBase {
     protected:
         std::vector<T> array;
+        uint8_t width = sizeof(T);
     public:
         NBTTagVector() {
             if (typeid(T) == typeid(int8_t)) {
@@ -58,23 +59,21 @@ namespace libnbt {
 
         virtual void read(std::istream &in) override {
             int32_t size = 0;
-            int8_t width = sizeof(T);
-            in.read((char *) &size, 4);
+            NBTBase::read(in, (char *) &size, 4);
             clear();
             for (int i = 0; i < size; i++) {
                 T temp;
-                in.read((char *) &temp, width);
+                NBTBase::read(in, (char *) &temp, width);
                 array.push_back(temp);
             }
         }
 
         virtual void write(std::ostream &out) override {
             int32_t size = (int32_t) array.size();
-            int8_t width = sizeof(T);
-            out.write((char *) &size, 4);
+            NBTBase::write(out, (char *) &size, 4);
             for (int i = 0; i < size; i++) {
                 T temp = array[i];
-                out.write((char *) &temp, width);
+                NBTBase::write(out, (char *) &temp, width);
             }
         }
 

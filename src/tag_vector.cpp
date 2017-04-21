@@ -11,7 +11,7 @@ namespace libnbt {
     void NBTTagList::read(std::istream &in) {
         in.get(child);
         int32_t size = 0;
-        in.read((char *) &size, 4);
+        NBTBase::read(in, (char *) &size, 4);
         clear();
         for (int i = 0; i < size; i++) {
             NBTBase *tag = createNewTag((TAG_TYPE) child);
@@ -23,7 +23,7 @@ namespace libnbt {
     void NBTTagList::write(std::ostream &out) {
         int32_t size = (int32_t) array.size();
         out.put(child);
-        out.write((char *) &size, 4);
+        NBTBase::write(out, (char *) &size, 4);
         for (int i = 0; i < size; i++) {
             array[i]->write(out);
         }
