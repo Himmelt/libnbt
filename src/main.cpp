@@ -8,12 +8,11 @@ using namespace libnbt;
 
 int main() {
     ofstream file("out.dat", ios::binary);
-    NBTTagCompound compound("rootKey");
-    compound.setTag("int", new NBTTagInt(34));
-    compound.write(file);
-    compound.setTag("int", new NBTTagString("override tag int"));
-    compound.write(file);
-    compound.clear();
-    cout << compound.hasTag("int") << endl;
+    ifstream level("level", ios::binary);
+    NBTTagCompound read("");
+    NBTBase::readNbt(level, &read);
+    read.setTag("int", new NBTTagInt(34));
+    read.setTag("comp", new NBTTagCompound("child root"));
+    NBTBase::writeNbt(file, &read);
     return 0;
 }

@@ -36,6 +36,8 @@ namespace libnbt {
         void setRoot(std::string rootKey);
 
         std::string getRoot();
+
+        virtual ~NBTTagCompound();
     };
 }
 

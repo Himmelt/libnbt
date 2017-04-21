@@ -105,6 +105,8 @@ namespace libnbt {
         bool remove(size_t index) override;
 
         void set(size_t index, NBTBase *data) override;
+
+        virtual ~NBTTagList();
     };
 }
 

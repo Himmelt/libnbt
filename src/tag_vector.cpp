@@ -52,4 +52,8 @@ namespace libnbt {
         }
     }
 
+    NBTTagList::~NBTTagList() {
+        clear();
+    }
+
 }

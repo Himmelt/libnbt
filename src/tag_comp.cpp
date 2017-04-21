@@ -23,14 +23,14 @@ namespace libnbt {
         clear();
         char child = -1;
         int16_t length = 0;
-        std::string key = "";
-        while (child != 0) {
-            in.get(child);
+        in.get(child);
+        while (child != 0 && !in.eof()) {
             NBTBase::read(in, (char *) &length, 2);
-            key = NBTBase::readString(in, length);
+            std::string key = NBTBase::readString(in, length);
             NBTBase *tag = createNewTag((TAG_TYPE) child);
             tag->read(in);
             setTag(key, tag);
+            in.get(child);
         }
     }
 
@@ -61,6 +61,7 @@ namespace libnbt {
     }
 
     NBTTagCompound::NBTTagCompound(std::string rootKey) {
+        this->type = COMPOUND;
         this->rootKey = rootKey;
     }
 
@@ -74,6 +75,10 @@ namespace libnbt {
 
     std::string NBTTagCompound::getRoot() {
         return rootKey;
+    }
+
+    NBTTagCompound::~NBTTagCompound() {
+        clear();
     }
 
 }

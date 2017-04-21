@@ -9,18 +9,8 @@ namespace libnbt {
 
     template<class T>
     class NBTTagData : public NBTBase {
-    protected:
-        T data;
-        uint8_t width = sizeof(T);
-    public:
-        NBTTagData() {}
-
-        NBTTagData(T data) {
-            setData(data);
-        }
-
-        void setData(T data) {
-            this->data = data;
+    private:
+        void setType() {
             if (typeid(T) == typeid(int8_t)) {
                 type = BYTE;
             } else if (typeid(T) == typeid(int16_t)) {
@@ -38,6 +28,21 @@ namespace libnbt {
             } else {
                 type = END;
             }
+        }
+
+    protected:
+        T data;
+        uint8_t width = sizeof(T);
+    public:
+        NBTTagData() { setType(); }
+
+        NBTTagData(T data) {
+            setType();
+            setData(data);
+        }
+
+        void setData(T data) {
+            this->data = data;
         }
 
         T getData() {
