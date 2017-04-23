@@ -3,10 +3,12 @@
 
 namespace libnbt {
     NBTTagCompound::NBTTagCompound() {
+        this->type = TYPE_COMPOUND;
         this->_root = new std::string();
         this->map = new std::unordered_map<std::string, NBTBase *>();
     }
     NBTTagCompound::NBTTagCompound(std::string root) {
+        this->type = TYPE_COMPOUND;
         this->_root = new std::string();
         this->map = new std::unordered_map<std::string, NBTBase *>();
         *this->_root = root;
@@ -54,7 +56,7 @@ namespace libnbt {
         int16_t length;
         std::string key;
         in.get(child);
-        while (child != 0 && !in.eof()) {
+        while (child != TYPE_END && !in.eof()) {
             length = NBT::read_short(in);
             key = NBT::read_string(in, length);
             NBTBase *tag = NBT::create(child);

@@ -2,7 +2,11 @@
 #include "libnbt.h"
 
 namespace libnbt {
+    NBTTagByte::NBTTagByte() {
+        this->type = TYPE_BYTE;
+    }
     NBTTagByte::NBTTagByte(int8_t data) {
+        this->type = TYPE_BYTE;
         this->data = data;
     }
     void NBTTagByte::set(int8_t data) {
@@ -24,7 +28,12 @@ namespace libnbt {
         return false;
     }
 
+    NBTTagShort::NBTTagShort() {
+        this->type = TYPE_SHORT;
+    }
+
     NBTTagShort::NBTTagShort(int16_t data) {
+        this->type = TYPE_SHORT;
         this->data = data;
     }
     void NBTTagShort::set(int16_t data) {
@@ -46,7 +55,12 @@ namespace libnbt {
         return false;
     }
 
+    NBTTagInt::NBTTagInt() {
+        this->type = TYPE_INT;
+    }
+
     NBTTagInt::NBTTagInt(int32_t data) {
+        this->type = TYPE_INT;
         this->data = data;
     }
     void NBTTagInt::set(int32_t data) {
@@ -68,7 +82,12 @@ namespace libnbt {
         return false;
     }
 
+    NBTTagLong::NBTTagLong() {
+        this->type = TYPE_LONG;
+    }
+
     NBTTagLong::NBTTagLong(int64_t data) {
+        this->type = TYPE_LONG;
         this->data = data;
     }
     void NBTTagLong::set(int64_t data) {
@@ -90,7 +109,12 @@ namespace libnbt {
         return false;
     }
 
+    NBTTagFloat::NBTTagFloat() {
+        this->type = TYPE_FLOAT;
+    }
+
     NBTTagFloat::NBTTagFloat(float_t data) {
+        this->type = TYPE_FLOAT;
         this->data = data;
     }
     void NBTTagFloat::set(float_t data) {
@@ -112,7 +136,12 @@ namespace libnbt {
         return false;
     }
 
+    NBTTagDouble::NBTTagDouble() {
+        this->type = TYPE_DOUBLE;
+    }
+
     NBTTagDouble::NBTTagDouble(double_t data) {
+        this->type = TYPE_DOUBLE;
         this->data = data;
     }
     void NBTTagDouble::set(double_t data) {
@@ -135,10 +164,12 @@ namespace libnbt {
     }
 
     NBTTagString::NBTTagString() {
+        this->type = TYPE_STRING;
         this->data = new std::string();
     }
 
     NBTTagString::NBTTagString(std::string data) {
+        this->type = TYPE_STRING;
         this->data = new std::string();
         *this->data = data;
     }

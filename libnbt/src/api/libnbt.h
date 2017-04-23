@@ -45,7 +45,7 @@ namespace libnbt {
         int8_t data = 0;
         static const int8_t width = 1;
     public:
-        NBTTagByte() {}
+        NBTTagByte();
         NBTTagByte(int8_t data);
         void set(int8_t data);
         int8_t get();
@@ -59,7 +59,7 @@ namespace libnbt {
         int16_t data = 0;
         static const int8_t width = 2;
     public:
-        NBTTagShort() {}
+        NBTTagShort();
         NBTTagShort(int16_t data);
         void set(int16_t data);
         int16_t get();
@@ -73,7 +73,7 @@ namespace libnbt {
         int32_t data = 0;
         static const int8_t width = 4;
     public:
-        NBTTagInt() {}
+        NBTTagInt();
         NBTTagInt(int32_t data);
         void set(int32_t data);
         int32_t get();
@@ -87,7 +87,7 @@ namespace libnbt {
         int64_t data = 0;
         static const int8_t width = 8;
     public:
-        NBTTagLong() {}
+        NBTTagLong();
         NBTTagLong(int64_t data);
         void set(int64_t data);
         int64_t get();
@@ -101,7 +101,7 @@ namespace libnbt {
         float_t data = 0.0;
         static const int8_t width = 4;
     public:
-        NBTTagFloat() {}
+        NBTTagFloat();
         NBTTagFloat(float_t data);
         void set(float_t data);
         float_t get();
@@ -115,7 +115,7 @@ namespace libnbt {
         double_t data = 0.0;
         static const int8_t width = 8;
     public:
-        NBTTagDouble() {}
+        NBTTagDouble();
         NBTTagDouble(double_t data);
         void set(double_t data);
         double_t get();
@@ -232,8 +232,8 @@ namespace libnbt {
         static void write(std::ostream &out, double_t data);
         static void write(std::ostream &out, std::string data);
         static NBTBase *create(char type);
-        static bool readNbt(std::istream &in, NBTBase *tag);
-        static bool writeNbt(std::ostream &out, NBTBase *tag);
+        static void readNbt(std::istream &in, NBTBase *tag);
+        static void writeNbt(std::ostream &out, NBTBase *tag);
     };
 
 }

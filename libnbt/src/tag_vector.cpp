@@ -3,6 +3,7 @@
 
 namespace libnbt {
     NBTTagByteArray::NBTTagByteArray() {
+        this->type = TYPE_BYTE_ARRAY;
         this->array = new std::vector<int8_t>();
     }
     NBTTagByteArray::~NBTTagByteArray() {
@@ -54,6 +55,7 @@ namespace libnbt {
     }
 
     NBTTagIntArray::NBTTagIntArray() {
+        this->type = TYPE_INT_ARRAY;
         this->array = new std::vector<int32_t>();
     }
 
@@ -87,7 +89,7 @@ namespace libnbt {
         int32_t size = NBT::read_int(in);
         clear();
         for (int i = 0; i < size; i++) {
-            int8_t temp = NBT::read_byte(in);
+            int32_t temp = NBT::read_int(in);
             array->push_back(temp);
         }
     }
@@ -95,7 +97,7 @@ namespace libnbt {
         int32_t size = (int32_t)array->size();
         NBT::write(out, size);
         for (int i = 0; i < size; i++) {
-            int8_t temp = array->at(i);
+            int32_t temp = array->at(i);
             NBT::write(out, temp);
         }
     }
@@ -107,10 +109,12 @@ namespace libnbt {
     }
 
     NBTTagList::NBTTagList() {
+        this->type = TYPE_LIST;
         this->list = new std::vector<NBTBase*>();
     }
 
     NBTTagList::NBTTagList(char child) {
+        this->type = TYPE_LIST;
         this->list = new std::vector<NBTBase*>();
         this->_child = child;
     }

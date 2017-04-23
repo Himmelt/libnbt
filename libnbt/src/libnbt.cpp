@@ -199,7 +199,7 @@ namespace libnbt {
                 return (NBTBase*)nullptr;
         }
     }
-    bool NBT::readNbt(std::istream & in, NBTBase * tag) {
+    void NBT::readNbt(std::istream & in, NBTBase * tag) {
         char head = TYPE_UNKNOWN, foot = TYPE_UNKNOWN;
         in.get(head);
         if (tag->getType() == TYPE_COMPOUND && head == TYPE_COMPOUND) {
@@ -207,12 +207,9 @@ namespace libnbt {
             int16_t length = NBT::read_short(in);
             compound->root(NBT::read_string(in, length));
             compound->read(in);
-            in.get(foot);
-            return foot == TYPE_END;
         }
-        return false;
     }
-    bool NBT::writeNbt(std::ostream & out, NBTBase * tag) {
+    void NBT::writeNbt(std::ostream & out, NBTBase * tag) {
         if (tag->getType() == TYPE_COMPOUND) {
             out.put(TYPE_COMPOUND);
             NBTTagCompound *compound = (NBTTagCompound *)tag;
@@ -221,8 +218,6 @@ namespace libnbt {
             NBT::write(out, compound->root());
             tag->write(out);
             out.put(TYPE_END);
-            return true;
         }
-        return false;
     }
 }
