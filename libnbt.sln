@@ -3,7 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libnbt", "libnbt.vcxproj", "{232107F7-EFA7-4257-A41D-E167EE804D2A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{037FD2BC-02D8-4468-9F56-58E4B50E898E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{232107F7-EFA7-4257-A41D-E167EE804D2A} = {232107F7-EFA7-4257-A41D-E167EE804D2A}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libnbt", "libnbt\libnbt.vcxproj", "{232107F7-EFA7-4257-A41D-E167EE804D2A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "项目", "项目", "{786813CF-EFD3-4F42-A376-6687E0E124CA}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +24,14 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{037FD2BC-02D8-4468-9F56-58E4B50E898E}.Debug|x64.ActiveCfg = Debug|x64
+		{037FD2BC-02D8-4468-9F56-58E4B50E898E}.Debug|x64.Build.0 = Debug|x64
+		{037FD2BC-02D8-4468-9F56-58E4B50E898E}.Debug|x86.ActiveCfg = Debug|Win32
+		{037FD2BC-02D8-4468-9F56-58E4B50E898E}.Debug|x86.Build.0 = Debug|Win32
+		{037FD2BC-02D8-4468-9F56-58E4B50E898E}.Release|x64.ActiveCfg = Release|x64
+		{037FD2BC-02D8-4468-9F56-58E4B50E898E}.Release|x64.Build.0 = Release|x64
+		{037FD2BC-02D8-4468-9F56-58E4B50E898E}.Release|x86.ActiveCfg = Release|Win32
+		{037FD2BC-02D8-4468-9F56-58E4B50E898E}.Release|x86.Build.0 = Release|Win32
 		{232107F7-EFA7-4257-A41D-E167EE804D2A}.Debug|x64.ActiveCfg = Debug|x64
 		{232107F7-EFA7-4257-A41D-E167EE804D2A}.Debug|x64.Build.0 = Debug|x64
 		{232107F7-EFA7-4257-A41D-E167EE804D2A}.Debug|x86.ActiveCfg = Debug|Win32

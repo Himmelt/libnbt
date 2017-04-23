@@ -138,9 +138,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\libnbt.cpp" />
     <ClCompile Include="src\stdafx.cpp">
@@ -155,6 +152,9 @@
     <ClInclude Include="src\api\libnbt.h" />
     <ClInclude Include="src\api\stdafx.h" />
     <ClInclude Include="src\api\targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

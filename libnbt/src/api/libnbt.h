@@ -1,15 +1,18 @@
 #ifndef LIBNBT_H
 #define LIBNBT_H
 
+#pragma once
 
+#include <string>
+#include <vector>
+#include <iostream>
+#include <unordered_map>
 
 #ifdef LIBNBT_EXPORTS
 #define LIBNBT_API __declspec(dllexport)
 #else
 #define LIBNBT_API __declspec(dllimport)
 #endif
-
-#pragma once
 
 #define TYPE_END          0
 #define TYPE_BYTE         1
