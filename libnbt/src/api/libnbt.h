@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <sstream>
 #include <unordered_map>
 
 #ifdef LIBNBT_EXPORTS
@@ -236,6 +237,38 @@ namespace libnbt {
         static void writeNbt(std::ostream &out, NBTBase *tag);
     };
 
+    class Pos {
+    public:
+        int x, y;
+    };
+
+    class LIBNBT_API Chunk {
+    private:
+        Pos pos;
+    public:
+
+    };
+
+    class EmptyChunk :public Chunk {
+
+    };
+
+    class LIBNBT_API Region {
+    private:
+        Chunk *chunks[32][32];
+        static EmptyChunk empty_chunk;
+        size_t next_entry;
+    public:
+        Region();
+        ~Region();
+        bool hasChunk(int x, int z);
+        void setChunk(int x, int z, Chunk *);
+        Chunk *getChunk(Pos pos);
+        void clear();
+        void remove(Pos pos);
+        void read(std::istream &in);
+        void write(std::ostream &out);
+    };
 }
 
 #endif //LIBNBT_H

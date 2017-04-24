@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="region.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\libnbt.cpp" />
     <ClCompile Include="src\stdafx.cpp">
