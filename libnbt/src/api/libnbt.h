@@ -244,30 +244,47 @@ namespace libnbt {
 
     class LIBNBT_API Chunk {
     private:
-        Pos pos;
+        bool _empty = true;
+        NBTTagCompound *level;
     public:
-
-    };
-
-    class EmptyChunk :public Chunk {
-
+        bool is_empty();
+        void set_empty();
     };
 
     class LIBNBT_API Region {
     private:
-        Chunk *chunks[32][32];
-        static EmptyChunk empty_chunk;
-        size_t next_entry;
+        int32_t offset[1024]={0};
+        int32_t timestamp[1024]={0};
+        Chunk chunks[32][32];
     public:
         Region();
         ~Region();
         bool hasChunk(int x, int z);
-        void setChunk(int x, int z, Chunk *);
-        Chunk *getChunk(Pos pos);
+        void setChunk(int x, int z, Chunk chunk);
+        Chunk &getChunk(Pos pos);
+        size_t get_entry(int x,int z);
+        void set_entry(int x,int z);
+        int32_t get_timestamp(int x,int z);
+        void set_timestamp(int x,int z);
         void clear();
         void remove(Pos pos);
         void read(std::istream &in);
         void write(std::ostream &out);
+    };
+    class ByteStream{
+    private:
+        char* byte;
+        size_t length;
+        size_t seek_r,seek_w;
+    public:
+        void copy(const char *byte,size_t length){
+            delete[](byte);
+            this->length = length;
+            this->seek_r = 0;
+            this->seek_w = 0;
+            this->byte = new char[length];
+            memcpy(byte,this->byte,length);
+        }
     };
 }
 
