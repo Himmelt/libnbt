@@ -271,21 +271,6 @@ namespace libnbt {
         void read(std::istream &in);
         void write(std::ostream &out);
     };
-    class ByteStream{
-    private:
-        char* byte;
-        size_t length;
-        size_t seek_r,seek_w;
-    public:
-        void copy(const char *byte,size_t length){
-            delete[](byte);
-            this->length = length;
-            this->seek_r = 0;
-            this->seek_w = 0;
-            this->byte = new char[length];
-            memcpy(byte,this->byte,length);
-        }
-    };
 }
 
 #endif //LIBNBT_H
