@@ -233,44 +233,26 @@ namespace libnbt {
         static void write(std::ostream &out, double_t data);
         static void write(std::ostream &out, std::string data);
         static NBTBase *create(char type);
-        static void readNbt(std::istream &in, NBTBase *tag);
-        static void writeNbt(std::ostream &out, NBTBase *tag);
-    };
-
-    class Pos {
-    public:
-        int x, y;
-    };
-
-    class LIBNBT_API Chunk {
-    private:
-        bool _empty = true;
-        NBTTagCompound *level;
-    public:
-        bool is_empty();
-        void set_empty();
+        static void readNbt(std::iostream &in, NBTTagCompound *comp);
+        static void writeNbt(std::ostream &out, NBTTagCompound *comp);
     };
 
     class LIBNBT_API Region {
     private:
-        int32_t offset[1024]={0};
-        int32_t timestamp[1024]={0};
-        Chunk chunks[32][32];
+        char offset[4096] = { 0 };
+        char timestamp[4096] = { 0 };
+        NBTTagCompound chunks[32][32];
     public:
-        Region();
-        ~Region();
-        bool hasChunk(int x, int z);
-        void setChunk(int x, int z, Chunk chunk);
-        Chunk &getChunk(Pos pos);
-        size_t get_entry(int x,int z);
-        void set_entry(int x,int z);
-        int32_t get_timestamp(int x,int z);
-        void set_timestamp(int x,int z);
-        void clear();
-        void remove(Pos pos);
-        void read(std::istream &in);
-        void write(std::ostream &out);
+        size_t getoff(int x, int z) {
+            int pos = 4 * x + 128 * z;
+            size_t off = offset[pos] * 65536 + offset[pos + 1] * 256 + offset[pos + 2];
+            return off*4096;
+        }
+        bool has(int x, int z);
+        void read(std::iostream &in);
+        void write(std::iostream &out);
     };
+
 }
 
 #endif //LIBNBT_H

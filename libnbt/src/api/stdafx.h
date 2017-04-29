@@ -21,4 +21,6 @@
 #include <vector>
 #include <typeinfo>
 #include <unordered_map>
+#include <sstream>
 
+#include "szlib.h"
