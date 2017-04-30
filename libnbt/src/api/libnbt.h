@@ -235,6 +235,10 @@ namespace libnbt {
         static NBTBase *create(char type);
         static void readNbt(std::istream &in, NBTTagCompound *comp);
         static void writeNbt(std::ostream &out, NBTTagCompound *comp);
+        static int s_compress(std::string &data);
+        static int s_uncompress(std::string &data);
+        static int s2_uncompress(std::string &data);
+
     };
 
     class LIBNBT_API Region {

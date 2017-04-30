@@ -23,4 +23,4 @@
 #include <unordered_map>
 #include <sstream>
 #include <cmath>
-#include "szlib.h"
+#include "zlib.h"

@@ -126,7 +126,7 @@ namespace libnbt {
     }
     void NBT::write(std::ostream & out, int64_t data) {
         char temp[8];
-        memcpy(temp, &data, 4);
+        memcpy(temp, &data, 8);
         if (endian()) {
             out.put(temp[7]);
             out.put(temp[6]);
@@ -154,7 +154,7 @@ namespace libnbt {
     }
     void NBT::write(std::ostream & out, double_t data) {
         char temp[8];
-        memcpy(temp, &data, 4);
+        memcpy(temp, &data, 8);
         if (endian()) {
             out.put(temp[7]);
             out.put(temp[6]);

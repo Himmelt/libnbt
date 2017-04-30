@@ -57,6 +57,9 @@ namespace libnbt {
         std::string key;
         in.get(child);
         while (child != TYPE_END && !in.eof()) {
+            if (child < 0 || child >11) {
+                std::cout << "error tag" << std::endl;
+            }
             length = NBT::read_short(in);
             key = NBT::read_string(in, length);
             NBTBase *tag = NBT::create(child);
@@ -73,10 +76,11 @@ namespace libnbt {
             NBT::write(out, length);
             NBT::write(out, i->first);
             i->second->write(out);
-            if (i->second->getType() == TYPE_COMPOUND) {
-                out.put(TYPE_END);
-            }
+            //if (i->second->getType() == TYPE_COMPOUND) {
+            //    out.put(TYPE_END);
+            //}
         }
+        out.put(TYPE_END);
     }
     bool NBTTagCompound::equals(NBTBase * tag) {
         if (NBTBase::equals(tag)) {

@@ -46,7 +46,7 @@ namespace libnbt {
         data = NBT::read_short(in);
     }
     void NBTTagShort::write(std::ostream & out) {
-        NBT::write(out,data);
+        NBT::write(out, data);
     }
     bool NBTTagShort::equals(NBTBase * tag) {
         if (NBTBase::equals(tag)) {
@@ -73,7 +73,7 @@ namespace libnbt {
         data = NBT::read_int(in);
     }
     void NBTTagInt::write(std::ostream & out) {
-        NBT::write(out,data);
+        NBT::write(out, data);
     }
     bool NBTTagInt::equals(NBTBase * tag) {
         if (NBTBase::equals(tag)) {
@@ -127,7 +127,7 @@ namespace libnbt {
         data = NBT::read_float(in);
     }
     void NBTTagFloat::write(std::ostream & out) {
-        NBT::write(out,data);
+        NBT::write(out, data);
     }
     bool NBTTagFloat::equals(NBTBase * tag) {
         if (NBTBase::equals(tag)) {

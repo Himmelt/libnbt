@@ -23,16 +23,34 @@ namespace libnbt {
                     if (length > 1) {
                         int8_t ztype = NBT::read_byte(in);
                         std::string nbt = NBT::read_string(in, length);
-                        std::cout << x << "," << z << " sec:" << off_set << " l:" << length << " n:" << nbt.size();
-                        int flag = s_uncompress(nbt);
+                        if (x == 0 && z == 5) {
+                            std::ofstream f("050raw.dat", std::ios::out | std::ios::binary);
+                            f.write(nbt.c_str(), nbt.size());
+                        }
+                        //std::cout << x << "," << z << " sec:" << off_set << " l:" << length << " n:" << nbt.size();
+                        int flag = NBT::s_uncompress(nbt);
                         if (flag == Z_OK) {
-                            std::cout << " u:" << nbt.size() << std::endl;
+                            if (x == 0 && z == 5) {
+                                std::ofstream f("050unraw.dat", std::ios::out | std::ios::binary);
+                                f.write(nbt.c_str(), nbt.size());
+                            }
+                            //std::cout << " u:" << nbt.size() << std::endl;
                             if (nbt.size() > 2) {
-                                std::istringstream stream(nbt);
+                                std::istringstream stream;
+                                stream.str(nbt);
+                                stream.seekg(0);
+                                if (x == 0 && z == 5) {
+                                    std::ofstream f("050stream.dat", std::ios::out | std::ios::binary);
+                                    NBT::write(f, stream.str());
+                                }
                                 NBTTagCompound *tag = new NBTTagCompound();
                                 NBT::readNbt(stream, tag);
                                 map->insert({ x + 32 * z, tag });
                                 //std::cout << map->size() << std::endl;
+                                if (x == 0 && z == 5) {
+                                    std::ofstream f("050nbt.dat", std::ios::out | std::ios::binary);
+                                    NBT::writeNbt(f, tag);
+                                }
                             }
                         } else {
                             std::cout << "ERR:" << flag << std::endl;
@@ -46,13 +64,21 @@ namespace libnbt {
     void Region::write(std::ostream & out) {
         std::ostringstream nbt;
         int32_t entry = 2;
-        for (int x = 0; x < 32; x++) {
-            for (int z = 0; z < 32; z++) {
+        for (int z = 0; z < 32; z++) {
+            for (int x = 0; x < 32; x++) {
                 if (has(x, z)) {
                     nbt.str("");
                     NBT::writeNbt(nbt, map->at(x + 32 * z));
                     std::string data = nbt.str();
-                    s_compress(data);
+                    if (x == 0 && z == 5) {
+                        std::ofstream f("050.dat", std::ios::out | std::ios::binary);
+                        f.write(data.c_str(), data.size());
+                    }
+                    NBT::s_compress(data);
+                    if (x == 0 && z == 5) {
+                        std::ofstream f("051.dat", std::ios::out | std::ios::binary);
+                        f.write(data.c_str(), data.size());
+                    }
                     int32_t length = data.size() + 1;
                     int8_t sec_size = ceil((length + 4) / 4096.0);
                     // 定位到(x,z)的offset入口

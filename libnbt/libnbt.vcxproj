@@ -159,7 +159,6 @@
   <ItemGroup>
     <ClInclude Include="src\api\libnbt.h" />
     <ClInclude Include="src\api\stdafx.h" />
-    <ClInclude Include="src\api\szlib.h" />
     <ClInclude Include="src\api\targetver.h" />
   </ItemGroup>
   <ItemGroup>
