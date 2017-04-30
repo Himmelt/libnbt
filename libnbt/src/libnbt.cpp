@@ -199,7 +199,7 @@ namespace libnbt {
                 return (NBTBase*)nullptr;
         }
     }
-    void NBT::readNbt(std::iostream & in, NBTTagCompound * comp) {
+    void NBT::readNbt(std::istream & in, NBTTagCompound * comp) {
         char head = TYPE_UNKNOWN, foot = TYPE_UNKNOWN;
         in.get(head);
         if (head == TYPE_COMPOUND) {
@@ -208,6 +208,7 @@ namespace libnbt {
             comp->read(in);
         }
     }
+
     void NBT::writeNbt(std::ostream & out, NBTTagCompound * comp) {
         out.put(TYPE_COMPOUND);
         int16_t length = (int16_t)comp->root().size();

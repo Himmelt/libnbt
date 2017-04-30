@@ -6,6 +6,8 @@
 #include <iostream>
 #include "zlib.h"
 
-int s_uncompress(std::iostream &in, size_t size, std::iostream &out);
+int s_compress(std::string &data);
+
+int s_uncompress(std::string &data);
 
 #endif // !SZLIB_H

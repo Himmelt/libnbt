@@ -233,7 +233,7 @@ namespace libnbt {
         static void write(std::ostream &out, double_t data);
         static void write(std::ostream &out, std::string data);
         static NBTBase *create(char type);
-        static void readNbt(std::iostream &in, NBTTagCompound *comp);
+        static void readNbt(std::istream &in, NBTTagCompound *comp);
         static void writeNbt(std::ostream &out, NBTTagCompound *comp);
     };
 
@@ -241,16 +241,20 @@ namespace libnbt {
     private:
         char offset[4096] = { 0 };
         char timestamp[4096] = { 0 };
-        NBTTagCompound chunks[32][32];
+        std::unordered_map<int, NBTTagCompound*> *map;
     public:
+        Region();
+        ~Region();
         size_t getoff(int x, int z) {
             int pos = 4 * x + 128 * z;
             size_t off = offset[pos] * 65536 + offset[pos + 1] * 256 + offset[pos + 2];
-            return off*4096;
+            return off * 4096;
         }
-        bool has(int x, int z);
-        void read(std::iostream &in);
-        void write(std::iostream &out);
+        bool has(int x, int z) {
+            return map->find(x + 32 * z) != map->end();
+        }
+        void read(std::istream &in);
+        void write(std::ostream &out);
     };
 
 }
