@@ -32,6 +32,9 @@ namespace libnbt {
     NBTBase * NBTTagCompound::get(std::string key) {
         return map->at(key);
     }
+    int NBTTagCompound::size() {
+        return map->size();
+    }
     std::string NBTTagCompound::root() {
         return *_root;
     }
@@ -58,7 +61,7 @@ namespace libnbt {
         in.get(child);
         while (child != TYPE_END && !in.eof()) {
             if (child < 0 || child >11) {
-                std::cout << "error tag" << std::endl;
+                NBT::LOG()<< "Error Tag:" << child << std::endl;
             }
             length = NBT::read_short(in);
             key = NBT::read_string(in, length);
@@ -76,9 +79,6 @@ namespace libnbt {
             NBT::write(out, length);
             NBT::write(out, i->first);
             i->second->write(out);
-            //if (i->second->getType() == TYPE_COMPOUND) {
-            //    out.put(TYPE_END);
-            //}
         }
         out.put(TYPE_END);
     }

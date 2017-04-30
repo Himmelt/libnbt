@@ -168,9 +168,11 @@ namespace libnbt {
             out.write(temp, 8);
         }
     }
+
     void NBT::write(std::ostream & out, std::string data) {
         out.write(data.c_str(), data.size());
     }
+
     NBTBase * NBT::create(char type) {
         switch (type) {
             case TYPE_BYTE:
@@ -199,23 +201,30 @@ namespace libnbt {
                 return (NBTBase*)nullptr;
         }
     }
+
     void NBT::readNbt(std::istream & in, NBTTagCompound * comp) {
         char head = TYPE_UNKNOWN, foot = TYPE_UNKNOWN;
         in.get(head);
         if (head == TYPE_COMPOUND) {
+            //NBT::LOG() << "Start Read NBT !" << std::endl;
             int16_t length = NBT::read_short(in);
             comp->root(NBT::read_string(in, length));
             comp->read(in);
+            //NBT::LOG() << "Finish Read NBT !" << std::endl;
+        } else {
+            NBT::LOG() << "Not Start NBT !" << std::endl;
         }
     }
 
     void NBT::writeNbt(std::ostream & out, NBTTagCompound * comp) {
+        //NBT::LOG() << "Start Write NBT !" << std::endl;
         out.put(TYPE_COMPOUND);
         int16_t length = (int16_t)comp->root().size();
         NBT::write(out, length);
         NBT::write(out, comp->root());
         comp->write(out);
         out.put(TYPE_END);
+        //NBT::LOG() << "Finish Write NBT !" << std::endl;
     }
 
 }

@@ -23,4 +23,6 @@
 #include <unordered_map>
 #include <sstream>
 #include <cmath>
+#include <time.h>
+#include <ctime>
 #include "zlib.h"

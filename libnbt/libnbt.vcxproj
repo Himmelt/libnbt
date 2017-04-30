@@ -147,6 +147,7 @@
     <ClCompile Include="region.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\libnbt.cpp" />
+    <ClCompile Include="src\log.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
@@ -160,9 +161,6 @@
     <ClInclude Include="src\api\libnbt.h" />
     <ClInclude Include="src\api\stdafx.h" />
     <ClInclude Include="src\api\targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

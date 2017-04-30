@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <unordered_map>
 
@@ -205,6 +206,7 @@ namespace libnbt {
         bool has(const std::string key);
         void set(std::string key, NBTBase *tag);
         NBTBase *get(std::string key);
+        int size();
         std::string root();
         void root(std::string root);
         void clear();
@@ -216,6 +218,7 @@ namespace libnbt {
 
     class LIBNBT_API NBT {
     public:
+        static std::ofstream& LOG();
         static bool endian();
         static int8_t read_byte(std::istream &in);
         static int16_t read_short(std::istream &in);
@@ -238,7 +241,7 @@ namespace libnbt {
         static int s_compress(std::string &data);
         static int s_uncompress(std::string &data);
         static int s2_uncompress(std::string &data);
-
+        static char* now();
     };
 
     class LIBNBT_API Region {
@@ -249,14 +252,7 @@ namespace libnbt {
     public:
         Region();
         ~Region();
-        size_t getoff(int x, int z) {
-            int pos = 4 * x + 128 * z;
-            size_t off = offset[pos] * 65536 + offset[pos + 1] * 256 + offset[pos + 2];
-            return off * 4096;
-        }
-        bool has(int x, int z) {
-            return map->find(x + 32 * z) != map->end();
-        }
+        bool has(int x, int z);
         void read(std::istream &in);
         void write(std::ostream &out);
     };
