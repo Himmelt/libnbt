@@ -21,6 +21,9 @@ namespace libnbt {
     bool NBTTagCompound::has(const std::string key) {
         return map->find(key) != map->end();
     }
+    bool NBTTagCompound::has(const std::string key, const char type) {
+        return has(key) && get(key)->getType() == type;
+    }
     void NBTTagCompound::set(std::string key, NBTBase * tag) {
         if (has(key)) {
             delete (map->at(key));
@@ -29,7 +32,7 @@ namespace libnbt {
             map->insert({ key, tag });
         }
     }
-    NBTBase * NBTTagCompound::get(std::string key) {
+    NBTBase * NBTTagCompound::get(const std::string key) {
         return map->at(key);
     }
     int NBTTagCompound::size() {
@@ -61,7 +64,7 @@ namespace libnbt {
         in.get(child);
         while (child != TYPE_END && !in.eof()) {
             if (child < 0 || child >11) {
-                NBT::LOG()<< "Error Tag:" << child << std::endl;
+                NBT::LOG() << "Error Tag:" << child << std::endl;
             }
             length = NBT::read_short(in);
             key = NBT::read_string(in, length);

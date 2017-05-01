@@ -11,4 +11,20 @@ namespace libnbt {
         }
         return false;
     }
+    bool NBTBase::has(const std::string key) {
+        return false;
+    }
+    bool NBTBase::has(const std::string key, const char type) {
+        return false;
+    }
+    NBTBase * NBTBase::get(const std::string key) {
+        return nullptr;
+    }
+    NBTTagByte * NBTBase::get_byte(const std::string key) {
+        if (has(key, TYPE_BYTE)) {
+            // 父类虚函数a调用虚函数b,执行的是子类虚函数b还是父类虚函数b
+            return (NBTTagByte*)get(key);
+        }
+        return nullptr;
+    }
 }

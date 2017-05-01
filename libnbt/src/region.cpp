@@ -15,6 +15,16 @@ namespace libnbt {
         return map->find(x + 32 * z) != map->end();
     }
 
+    NBTTagCompound * Region::get(int x, int z) {
+        return map->at(x + 32 * z);
+    }
+
+    void Region::cls_entities(int x, int z) {
+        if (has(x, z)) {
+            NBTTagList *list = (NBTTagList *)((NBTTagCompound*)get(x, z)->get("Level"))->get("Entities");
+        }
+    }
+
     void Region::read(std::istream & in) {
         NBT::LOG() << "Start Read Region !" << std::endl;
         in.read(offset, 0x1000);

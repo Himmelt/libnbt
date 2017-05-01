@@ -38,6 +38,10 @@ namespace libnbt {
     public:
         virtual char getType();
         virtual bool equals(NBTBase *tag);
+        virtual bool has(const std::string key);
+        virtual bool has(const std::string key, const char type);
+        virtual NBTBase *get(const std::string key);
+        virtual NBTTagByte *get_byte(const std::string key);
         virtual void read(std::istream &in) = 0;
         virtual void write(std::ostream &out) = 0;
     };
@@ -203,9 +207,10 @@ namespace libnbt {
         NBTTagCompound();
         NBTTagCompound(std::string root);
         ~NBTTagCompound();
-        bool has(const std::string key);
+        bool has(const std::string key) override;
+        bool has(const std::string key, const char type) override;
         void set(std::string key, NBTBase *tag);
-        NBTBase *get(std::string key);
+        NBTBase *get(const std::string key) override;
         int size();
         std::string root();
         void root(std::string root);
@@ -253,6 +258,8 @@ namespace libnbt {
         Region();
         ~Region();
         bool has(int x, int z);
+        NBTTagCompound *get(int x, int z);
+        void cls_entities(int x, int z);
         void read(std::istream &in);
         void write(std::ostream &out);
     };
