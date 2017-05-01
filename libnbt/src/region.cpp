@@ -2,15 +2,19 @@
 #include "libnbt.h"
 
 namespace libnbt {
+
     Region::Region() {
         map = new std::unordered_map<int, NBTTagCompound*>();
     }
+
     Region::~Region() {
         delete(map);
     }
+
     bool Region::has(int x, int z) {
         return map->find(x + 32 * z) != map->end();
     }
+
     void Region::read(std::istream & in) {
         NBT::LOG() << "Start Read Region !" << std::endl;
         in.read(offset, 0x1000);
