@@ -57,7 +57,7 @@ namespace libnbt {
                 temp[width - i - 1] = t;
             }
             memcpy(data, temp, width);
-            delete[](temp);
+            delete[] temp;
         } else {
             in.read(data, width);
         }
@@ -73,7 +73,7 @@ namespace libnbt {
                 temp[width - i - 1] = t;
             }
             out.write(temp, width);
-            delete[](temp);
+            delete[] temp;
         } else {
             out.write(data, width);
         }

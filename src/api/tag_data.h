@@ -32,7 +32,7 @@ namespace libnbt {
 
     protected:
         T _data;
-        uint8_t width = sizeof(T);
+        static uint8_t width;
     public:
         NBTTagData() { setType(); }
 
@@ -66,6 +66,9 @@ namespace libnbt {
             return false;
         }
     };
+
+    template<typename T>
+    uint8_t NBTTagData<T>::width = sizeof(T);
 
     typedef NBTTagData<int8_t> NBTTagByte;
     typedef NBTTagData<int16_t> NBTTagShort;

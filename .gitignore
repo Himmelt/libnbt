@@ -1,2 +1,2 @@
 .vs/
-cmake-build-debug/
+cmake-build**/
