@@ -48,7 +48,7 @@ namespace libnbt {
     }
 
     void NBTBase::read(std::istream &in, char *data, uint8_t width) {
-        if (width > 1 && littleEndian()) {
+        if (width > 1 && littleEndian) {
             char t, *temp = new char[width];
             in.read(temp, width);
             for (int i = 0; i < width / 2; i++) {
@@ -64,7 +64,7 @@ namespace libnbt {
     }
 
     void NBTBase::write(std::ostream &out, const char *data, uint8_t width) {
-        if (width > 1 && littleEndian()) {
+        if (width > 1 && littleEndian) {
             char t, *temp = new char[width];
             memcpy(temp, data, width);
             for (int i = 0; i < width / 2; i++) {

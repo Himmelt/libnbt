@@ -11,10 +11,8 @@
 
 namespace libnbt {
 
-    static inline bool littleEndian() {
-        int32_t num = 0x12345678;
-        return ((int8_t *) &num)[0] == 0x78;
-    }
+    static const int32_t testEndian = 0x12345678;
+    static const bool littleEndian = ((int8_t *) &testEndian)[0] == 0x78;
 
     enum TAG_TYPE {
         END, BYTE, SHORT, INT, LONG, FLOAT, DOUBLE,
