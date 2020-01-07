@@ -57,7 +57,7 @@ namespace libnbt {
             array.clear();
         }
 
-        virtual void read(std::istream &in) override {
+        void read(std::istream &in) override {
             int32_t size = 0;
             NBTBase::read(in, (char *) &size, 4);
             clear();
@@ -68,8 +68,8 @@ namespace libnbt {
             }
         }
 
-        virtual void write(std::ostream &out) override {
-            int32_t size = (int32_t) array.size();
+        void write(std::ostream &out) override {
+            auto size = (int32_t) array.size();
             NBTBase::write(out, (char *) &size, 4);
             for (int i = 0; i < size; i++) {
                 T temp = array[i];
@@ -90,9 +90,9 @@ namespace libnbt {
     private:
         char child = 0;
     public:
-        NBTTagList() {}
+        NBTTagList() = default;
 
-        NBTTagList(TAG_TYPE child);
+        explicit NBTTagList(TAG_TYPE child);
 
         TAG_TYPE getListType();
 
@@ -106,7 +106,7 @@ namespace libnbt {
 
         void set(size_t index, NBTBase *data) override;
 
-        virtual ~NBTTagList();
+        ~NBTTagList() override;
     };
 }
 

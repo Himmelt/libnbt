@@ -47,15 +47,8 @@ namespace libnbt {
         }
     }
 
-    bool NBTBase::endian = isLittleEndian();
-
-    bool NBTBase::isLittleEndian() {
-        int32_t num = 0x12345678;
-        return ((int8_t *) &num)[0] == 0x78;
-    }
-
     void NBTBase::read(std::istream &in, char *data, uint8_t width) {
-        if (width > 1 && endian) {
+        if (width > 1 && littleEndian()) {
             char t, *temp = new char[width];
             in.read(temp, width);
             for (int i = 0; i < width / 2; i++) {
@@ -71,7 +64,7 @@ namespace libnbt {
     }
 
     void NBTBase::write(std::ostream &out, const char *data, uint8_t width) {
-        if (width > 1 && endian) {
+        if (width > 1 && littleEndian()) {
             char t, *temp = new char[width];
             memcpy(temp, data, width);
             for (int i = 0; i < width / 2; i++) {
@@ -87,7 +80,7 @@ namespace libnbt {
     }
 
     std::string NBTBase::readString(std::istream &in, int16_t length) {
-        std::string temp = "";
+        std::string temp;
         temp.clear();
         char s;
         while (length--) {
@@ -102,7 +95,7 @@ namespace libnbt {
         char foot = -1;
         in.get(head);
         if (tag->getType() == COMPOUND && head == COMPOUND) {
-            NBTTagCompound *compound = (NBTTagCompound *) tag;
+            auto *compound = (NBTTagCompound *) tag;
             int16_t length = 0;
             NBTBase::read(in, (char *) &length, 2);
             compound->setRoot(NBTBase::readString(in, length));
@@ -116,7 +109,7 @@ namespace libnbt {
     bool NBTBase::writeNbt(std::ostream &out, NBTBase *tag) {
         if (tag->getType() == COMPOUND) {
             out.put(COMPOUND);
-            NBTTagCompound *compound = (NBTTagCompound *) tag;
+            auto *compound = (NBTTagCompound *) tag;
             int16_t length = (int16_t) compound->getRoot().size();
             NBTBase::write(out, (char *) &length, 2);
             out.write(compound->getRoot().c_str(), length);
@@ -127,4 +120,5 @@ namespace libnbt {
         return false;
     }
 
+    NBTBase::~NBTBase() = default;
 }

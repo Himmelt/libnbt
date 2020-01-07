@@ -1,12 +1,14 @@
 #include "api/tag_comp.h"
 
+#include <utility>
+
 namespace libnbt {
 
-    bool NBTTagCompound::hasTag(const std::string key) {
+    bool NBTTagCompound::hasTag(const std::string& key) {
         return map.find(key) != map.end();
     }
 
-    void NBTTagCompound::setTag(std::string key, NBTBase *tag) {
+    void NBTTagCompound::setTag(const std::string &key, NBTBase *tag) {
         if (hasTag(key)) {
             delete (map.at(key));
             map.at(key) = tag;
@@ -15,7 +17,7 @@ namespace libnbt {
         }
     }
 
-    NBTBase *NBTTagCompound::getTag(std::string key) {
+    NBTBase *NBTTagCompound::getTag(const std::string &key) {
         return map.at(key);
     }
 
@@ -35,10 +37,10 @@ namespace libnbt {
     }
 
     void NBTTagCompound::write(std::ostream &out) {
-        std::unordered_map<std::string, NBTBase *>::iterator i = map.begin();
+        auto i = map.begin();
         for (; i != map.end(); i++) {
             out.put(i->second->type);
-            int16_t l = (int16_t) i->first.size();
+            auto l = (int16_t) i->first.size();
             NBTBase::write(out, (char *) &l, 2);
             out.write(i->first.c_str(), l);
             i->second->write(out);
@@ -49,7 +51,7 @@ namespace libnbt {
     }
 
     void NBTTagCompound::clear() {
-        std::unordered_map<std::string, NBTBase *>::iterator i = map.begin();
+        auto i = map.begin();
         for (; i != map.end(); i++) {
             delete (i->second);
         }
@@ -60,17 +62,18 @@ namespace libnbt {
         this->type = COMPOUND;
     }
 
-    NBTTagCompound::NBTTagCompound(std::string rootKey) {
+    NBTTagCompound::NBTTagCompound(std::string root) {
         this->type = COMPOUND;
-        this->rootKey = rootKey;
+        this->rootKey = std::move(root);
     }
 
+    // TODO implement
     bool NBTTagCompound::check() {
         return true;
     }
 
-    void NBTTagCompound::setRoot(std::string rootKey) {
-        this->rootKey = rootKey;
+    void NBTTagCompound::setRoot(std::string root) {
+        this->rootKey = std::move(root);
     }
 
     std::string NBTTagCompound::getRoot() {
@@ -78,7 +81,10 @@ namespace libnbt {
     }
 
     NBTTagCompound::~NBTTagCompound() {
-        clear();
+        auto i = map.begin();
+        for (; i != map.end(); i++) {
+            delete (i->second);
+        }
+        map.clear();
     }
-
 }

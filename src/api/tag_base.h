@@ -10,6 +10,12 @@
 #include <typeinfo>
 
 namespace libnbt {
+
+    static inline bool littleEndian() {
+        int32_t num = 0x12345678;
+        return ((int8_t *) &num)[0] == 0x78;
+    }
+
     enum TAG_TYPE {
         END, BYTE, SHORT, INT, LONG, FLOAT, DOUBLE,
         BYTE_ARRAY, STRING, LIST, COMPOUND, INT_ARRAY
@@ -19,19 +25,15 @@ namespace libnbt {
     public:
         char type = 0;
 
-        static bool endian;
+        virtual void read(std::istream &in) = 0;
 
-        virtual void read(std::istream &in)=0;
-
-        virtual void write(std::ostream &out)=0;
+        virtual void write(std::ostream &out) = 0;
 
         virtual TAG_TYPE getType();
 
         virtual bool equals(NBTBase &tag);
 
         static NBTBase *createNewTag(TAG_TYPE type);
-
-        static bool isLittleEndian();
 
         static void read(std::istream &in, char *data, uint8_t width);
 
@@ -43,15 +45,17 @@ namespace libnbt {
 
         static bool writeNbt(std::ostream &out, NBTBase *tag);
 
+        virtual ~NBTBase();
     };
 
     class NBTTagEnd : public NBTBase {
     public:
         void read(std::istream &in) override {}
 
+        ~NBTTagEnd() override = default;
+
         void write(std::ostream &out) override {}
     };
-
 }
 
 #endif //LIBNBT_TAG_BASE_H

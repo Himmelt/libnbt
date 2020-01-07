@@ -17,13 +17,13 @@ namespace libnbt {
 
         NBTTagCompound();
 
-        NBTTagCompound(std::string rootKey);
+        explicit NBTTagCompound(std::string root);
 
-        bool hasTag(const std::string key);
+        bool hasTag(const std::string& key);
 
-        void setTag(std::string key, NBTBase *tag);
+        void setTag(const std::string& key, NBTBase *tag);
 
-        NBTBase *getTag(std::string key);
+        NBTBase *getTag(const std::string& key);
 
         void read(std::istream &in) override;
 
@@ -33,11 +33,11 @@ namespace libnbt {
 
         bool check();
 
-        void setRoot(std::string rootKey);
+        void setRoot(std::string root);
 
         std::string getRoot();
 
-        virtual ~NBTTagCompound();
+        ~NBTTagCompound() override;
     };
 }
 

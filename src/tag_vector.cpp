@@ -21,7 +21,7 @@ namespace libnbt {
     }
 
     void NBTTagList::write(std::ostream &out) {
-        int32_t size = (int32_t) array.size();
+        auto size = (int32_t) array.size();
         out.put(child);
         NBTBase::write(out, (char *) &size, 4);
         for (int i = 0; i < size; i++) {
@@ -30,8 +30,8 @@ namespace libnbt {
     }
 
     void NBTTagList::clear() {
-        for (int i = 0; i < array.size(); i++) {
-            delete (array[i]);
+        for (auto &i : array) {
+            delete i;
         }
         array.clear();
     }
@@ -53,7 +53,9 @@ namespace libnbt {
     }
 
     NBTTagList::~NBTTagList() {
-        clear();
+        for (auto &i : array) {
+            delete i;
+        }
+        array.clear();
     }
-
 }

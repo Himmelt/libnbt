@@ -31,35 +31,37 @@ namespace libnbt {
         }
 
     protected:
-        T data;
+        T _data;
         uint8_t width = sizeof(T);
     public:
         NBTTagData() { setType(); }
 
-        NBTTagData(T data) {
+        explicit NBTTagData(T data) {
             setType();
             setData(data);
         }
 
         void setData(T data) {
-            this->data = data;
+            this->_data = data;
         }
 
         T getData() {
-            return data;
+            return _data;
         }
 
+        ~NBTTagData() override = default;
+
         void read(std::istream &in) override {
-            NBTBase::read(in, (char *) &data, width);
+            NBTBase::read(in, (char *) &_data, width);
         }
 
         void write(std::ostream &out) override {
-            NBTBase::write(out, (char *) &data, width);
+            NBTBase::write(out, (char *) &_data, width);
         }
 
         bool equals(NBTBase &tag) override {
             if (NBTBase::equals(tag)) {
-                return this->data == ((NBTTagData<T> &) tag).data;
+                return this->_data == ((NBTTagData<T> &) tag)._data;
             }
             return false;
         }
@@ -74,9 +76,9 @@ namespace libnbt {
 
     class NBTTagString : public NBTTagData<std::string> {
     public:
-        NBTTagString() {}
+        NBTTagString() = default;
 
-        NBTTagString(const std::string &data) : NBTTagData(data) {}
+        explicit NBTTagString(const std::string &data) : NBTTagData(data) {}
 
         void read(std::istream &in) override;
 
