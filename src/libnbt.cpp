@@ -69,7 +69,7 @@ namespace libnbt {
         readBytes(in, (char *) &size, 4);
         clear();
         for (int i = 0; i < size; i++) {
-            NBTBase *tag = createNewTag((TAG_TYPE) child);
+            auto *tag = createNewTag((TAG_TYPE) child);
             tag->read(in);
             array.push_back(tag);
         }
@@ -80,7 +80,7 @@ namespace libnbt {
         out.put(child);
         writeBytes(out, (char *) &size, 4);
         for (int i = 0; i < size; i++) {
-            NBTBase *nbt = array[i];
+            auto *nbt = array[i];
             nbt->write(out);
             if (nbt->getType() == COMPOUND) {
                 out.put(END);
@@ -151,7 +151,7 @@ namespace libnbt {
         while (child != 0 && !in.eof()) {
             readBytes(in, (char *) &length, 2);
             std::string key = readString(in, length);
-            NBTBase *tag = createNewTag((TAG_TYPE) child);
+            auto *tag = createNewTag((TAG_TYPE) child);
             tag->read(in);
             setTag(key, tag);
             in.get(child);
@@ -161,7 +161,7 @@ namespace libnbt {
     void NBTTagCompound::write(std::ostream &out) {
         auto i = map.begin();
         for (; i != map.end(); i++) {
-            NBTBase *nbt = i->second;
+            auto *nbt = i->second;
             out.put(nbt->getType());
             auto size = (int16_t) i->first.size();
             writeBytes(out, (char *) &size, 2);
