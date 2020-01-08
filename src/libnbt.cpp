@@ -131,6 +131,14 @@ namespace libnbt {
         return map.at(key);
     }
 
+    std::set<std::string> NBTTagCompound::getKeys() {
+        std::set<std::string> keys;
+        for (auto & i : map) {
+            keys.insert(i.first);
+        }
+        return keys;
+    }
+
     void NBTTagCompound::read(std::istream &in) {
         clear();
         char child = -1;

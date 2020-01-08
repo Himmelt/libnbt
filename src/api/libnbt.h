@@ -3,11 +3,9 @@
 
 #pragma once
 
+#include <set>
 #include <iostream>
-#include <fstream>
-#include <string>
 #include <vector>
-#include <typeinfo>
 #include <unordered_map>
 
 namespace libnbt {
@@ -235,6 +233,8 @@ namespace libnbt {
         void setTag(const std::string &key, NBTBase *tag);
 
         NBTBase *getTag(const std::string &key);
+
+        std::set<std::string> getKeys();
 
         void read(std::istream &in) override;
 
