@@ -163,7 +163,7 @@ namespace libnbt {
             return array[index];
         }
 
-        std::vector<T> get() {
+        std::vector<T> getArray() {
             return array;
         }
 
