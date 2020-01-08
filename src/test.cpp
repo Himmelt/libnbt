@@ -9,8 +9,10 @@ int main() {
     ifstream level("level", ios::binary);
     NBTTagCompound read("");
     libnbt::readNbt(level, &read);
-    read.setTag("int", new NBTTagInt(34));
-    read.setTag("comp", new NBTTagCompound("child root"));
+    read.setTag("set_int", new NBTTagInt(666));
+    read.setTag("set_long", new NBTTagLong(6667896));
+    read.setTag("set_string", new NBTTagString("test string hello !"));
+    read.setTag("set_comp", new NBTTagCompound("child root"));
     libnbt::writeNbt(file, &read);
     return 0;
 }

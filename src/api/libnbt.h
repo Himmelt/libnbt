@@ -12,14 +12,25 @@
 
 namespace libnbt {
 
-    enum TAG_TYPE {
-        END, BYTE, SHORT, INT, LONG, FLOAT, DOUBLE,
-        BYTE_ARRAY, STRING, LIST, COMPOUND, INT_ARRAY
+    enum TAG_TYPE : char {
+        END = 0,
+        BYTE = 1,
+        SHORT = 2,
+        INT = 3,
+        LONG = 4,
+        FLOAT = 5,
+        DOUBLE = 6,
+        BYTE_ARRAY = 7,
+        STRING = 8,
+        LIST = 9,
+        COMPOUND = 10,
+        INT_ARRAY = 11,
+        LONG_ARRAY = 12
     };
 
     class NBTBase {
     protected:
-        char type = 0;
+        char type = END;
     public:
         virtual void read(std::istream &in) = 0;
 
@@ -127,8 +138,10 @@ namespace libnbt {
         NBTTagVector() {
             if (typeid(T) == typeid(int8_t)) {
                 type = BYTE_ARRAY;
-            } else if (typeid(T) == typeid(int16_t)) {
+            } else if (typeid(T) == typeid(int32_t)) {
                 type = INT_ARRAY;
+            } else if (typeid(T) == typeid(int64_t)) {
+                type = LONG_ARRAY;
             } else {
                 type = LIST;
             }
@@ -179,13 +192,14 @@ namespace libnbt {
 
     typedef NBTTagVector<int8_t> NBTTagByteArray;
     typedef NBTTagVector<int32_t> NBTTagIntArray;
+    typedef NBTTagVector<int64_t> NBTTagLongArray;
 
     template<typename T>
     uint8_t NBTTagVector<T>::width = sizeof(T);
 
     class NBTTagList : public NBTTagVector<NBTBase *> {
     private:
-        char child = 0;
+        char child = END;
     public:
         NBTTagList() = default;
 
@@ -237,36 +251,24 @@ namespace libnbt {
         ~NBTTagCompound() override;
     };
 
-    static const int32_t testEndian = 0x12345678;
-    static const bool littleEndian = ((int8_t *) &testEndian)[0] == 0x78;
+    static int32_t testEndian = 0x12345678;
+    static const bool bigEndian = ((int8_t *) &testEndian)[0] == 0x12;
 
     static void readBytes(std::istream &in, char *data, uint8_t width) {
-        if (width > 1 && littleEndian) {
-            char t, *temp = new char[width];
-            in.read(temp, width);
-            for (int i = 0; i < width / 2; i++) {
-                t = temp[i];
-                temp[i] = temp[width - i - 1];
-                temp[width - i - 1] = t;
+        if (width > 1 && !bigEndian) {
+            for (int i = 0; i < width; i++) {
+                in.get(data[width - i - 1]);
             }
-            memcpy(data, temp, width);
-            delete[] temp;
         } else {
             in.read(data, width);
         }
     }
 
     static void writeBytes(std::ostream &out, const char *data, uint8_t width) {
-        if (width > 1 && littleEndian) {
-            char t, *temp = new char[width];
-            memcpy(temp, data, width);
-            for (int i = 0; i < width / 2; i++) {
-                t = temp[i];
-                temp[i] = temp[width - i - 1];
-                temp[width - i - 1] = t;
+        if (width > 1 && !bigEndian) {
+            for (int i = 0; i < width; i++) {
+                out.put(data[width - i - 1]);
             }
-            out.write(temp, width);
-            delete[] temp;
         } else {
             out.write(data, width);
         }
@@ -275,10 +277,10 @@ namespace libnbt {
     static std::string readString(std::istream &in, int16_t length) {
         std::string temp;
         temp.clear();
-        char s;
+        char ch;
         while (length--) {
-            in.get(s);
-            temp.push_back(s);
+            in.get(ch);
+            temp.push_back(ch);
         }
         return temp;
     }
@@ -333,6 +335,8 @@ namespace libnbt {
                 return new NBTTagCompound();
             case INT_ARRAY:
                 return new NBTTagIntArray();
+            case LONG_ARRAY:
+                return new NBTTagLongArray();
             default:
                 return new NBTTagEnd();
         }

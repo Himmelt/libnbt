@@ -150,12 +150,12 @@ namespace libnbt {
         auto i = map.begin();
         for (; i != map.end(); i++) {
             out.put(i->second->getType());
-            auto l = (int16_t) i->first.size();
-            writeBytes(out, (char *) &l, 2);
-            out.write(i->first.c_str(), l);
+            auto size = (int16_t) i->first.size();
+            writeBytes(out, (char *) &size, 2);
+            out.write(i->first.c_str(), size);
             i->second->write(out);
             if (i->second->getType() == COMPOUND) {
-                out.put(0);
+                out.put(END);
             }
         }
     }
