@@ -6,6 +6,7 @@ using namespace std;
 using namespace libnbt;
 
 int main() {
+    cout << "---------- test begin ----------" << endl;
     ofstream outFile("out.dat", ios::binary);
     ifstream inFile("servers.dat", ios::binary);
     NBTTagCompound tag;
@@ -26,5 +27,6 @@ int main() {
     tag.setTag("set_string", new NBTTagString("test string hello !"));
     tag.setTag("set_comp", new NBTTagCompound("child root"));
     libnbt::writeNbt(outFile, &tag);
+    cout << "---------- test finish ----------" << endl;
     return 0;
 }
