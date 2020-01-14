@@ -14,9 +14,6 @@ jobs:
         mkdir build
         cd build
         cmake ..
-        ls
-    - name: configure
-      run: ./configure
     - name: make
       run: make
     - name: make check
